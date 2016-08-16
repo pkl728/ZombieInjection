@@ -92,7 +92,7 @@ public class ImageDownloader {
     public private(set) var credential: URLCredential?
 
     /// The underlying Alamofire `Manager` instance used to handle all download requests.
-    public let sessionManager: Alamofire.Manager
+    public let sessionManager: Alamofire.SessionManager
 
     let downloadPrioritization: DownloadPrioritization
     let maximumActiveDownloads: Int
@@ -124,7 +124,7 @@ public class ImageDownloader {
     public class func defaultURLSessionConfiguration() -> URLSessionConfiguration {
         let configuration = URLSessionConfiguration.default
 
-        configuration.httpAdditionalHeaders = Manager.defaultHTTPHeaders
+        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
         configuration.httpShouldSetCookies = true
         configuration.httpShouldUsePipelining = false
 
@@ -168,7 +168,7 @@ public class ImageDownloader {
         maximumActiveDownloads: Int = 4,
         imageCache: ImageRequestCache? = AutoPurgingImageCache())
     {
-        self.sessionManager = Alamofire.Manager(configuration: configuration)
+        self.sessionManager = Alamofire.SessionManager(configuration: configuration)
         self.sessionManager.startRequestsImmediately = false
 
         self.downloadPrioritization = downloadPrioritization
@@ -188,7 +188,7 @@ public class ImageDownloader {
         - returns: The new `ImageDownloader` instance.
     */
     public init(
-        sessionManager: Manager,
+        sessionManager: SessionManager,
         downloadPrioritization: DownloadPrioritization = .fifo,
         maximumActiveDownloads: Int = 4,
         imageCache: ImageRequestCache? = AutoPurgingImageCache())

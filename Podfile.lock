@@ -1,15 +1,15 @@
 PODS:
-  - Alamofire (3.4.1)
+  - Alamofire (4.0.0)
   - AlamofireImage (2.4.1):
-    - Alamofire (~> 3.3)
+    - Alamofire (~> 4.0)
   - Bond (4.3.1)
   - Dip (4.6.0)
 
 DEPENDENCIES:
   - Alamofire (from `https://github.com/Alamofire/Alamofire.git`, branch `swift3`)
-  - AlamofireImage (from `https://github.com/Alamofire/AlamofireImage.git`, branch `swift3`)
-  - Bond (from `~/Projects/Bond`)
-  - Dip (from `https://github.com/patrick-lind/Dip.git`, branch `feature/swift3`)
+  - AlamofireImage (from `https://github.com/pkl728/AlamofireImage.git`, branch `swift3`)
+  - Bond (from `https://github.com/pkl728/Bond.git`, branch `swift3`)
+  - Dip (from `https://github.com/AliSoftware/Dip.git`, branch `feature/swift3`)
 
 EXTERNAL SOURCES:
   Alamofire:
@@ -17,30 +17,34 @@ EXTERNAL SOURCES:
     :git: https://github.com/Alamofire/Alamofire.git
   AlamofireImage:
     :branch: swift3
-    :git: https://github.com/Alamofire/AlamofireImage.git
+    :git: https://github.com/pkl728/AlamofireImage.git
   Bond:
-    :path: "~/Projects/Bond"
+    :branch: swift3
+    :git: https://github.com/pkl728/Bond.git
   Dip:
     :branch: feature/swift3
-    :git: https://github.com/patrick-lind/Dip.git
+    :git: https://github.com/AliSoftware/Dip.git
 
 CHECKOUT OPTIONS:
   Alamofire:
-    :commit: a94323c6e556d47408b6186c948324b040d7ffc8
+    :commit: 138058fd93487e695d267a9733b0cdfcde25b0d3
     :git: https://github.com/Alamofire/Alamofire.git
   AlamofireImage:
-    :commit: 81692bbc6bcba15133809310404cd4784a7450c7
-    :git: https://github.com/Alamofire/AlamofireImage.git
+    :commit: e44a6ccb3b69b1067bc33ac362307ae06e99e0e3
+    :git: https://github.com/pkl728/AlamofireImage.git
+  Bond:
+    :commit: 418e1e030d41110371ec45b4b204da2d1e3b61fd
+    :git: https://github.com/pkl728/Bond.git
   Dip:
-    :commit: 78c628c6fa26155b111696e992586e28bacf5cdd
-    :git: https://github.com/patrick-lind/Dip.git
+    :commit: 33244d4c49f5f4a9b40f76f3bad5687329f3b495
+    :git: https://github.com/AliSoftware/Dip.git
 
 SPEC CHECKSUMS:
-  Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
-  AlamofireImage: 3ccf3347d9ea24580dc11fb892770a0be6a29826
+  Alamofire: fef59f00388f267e52d9b432aa5d93dc97190f14
+  AlamofireImage: c89e237ea56cad35c205469f108ed424d058e218
   Bond: 55903fc67f09e8e49791a657163cabba1d6fb29d
   Dip: 0ad6f83e1989af520bcaaf1b56e54034b1533057
 
-PODFILE CHECKSUM: 9645b874eb27dcbfe8e5d9c42a8b32a224a45cbe
+PODFILE CHECKSUM: b166bb72f3e5ecf8c3d71e7b2418f5aa958f08be
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.1.0.beta.1

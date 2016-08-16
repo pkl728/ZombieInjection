@@ -64,7 +64,18 @@ public final class DependencyContainer {
    
    - note: The `configBlock` is simply called at the end of the `init` to let you configure everything. 
            It is only present for convenience to have a cleaner syntax when declaring and initializing
-           your `DependencyContainer` instances.
+           your `DependencyContainer` instances. 
+   
+   - warning: If you use `configBlock` you need to make sure you don't create retain cycles. For example
+              there will be a retain cycle between container and its definition if you reference container
+              inside definition's factory. You can avoid that by using unowned reference to container:
+   
+   ```swift
+   let container = DependencyContainer() { container in
+     unowned let container = container
+     //register definitions
+   }
+   ```
    
    - returns: A new DependencyContainer.
    */
@@ -200,7 +211,7 @@ extension DependencyContainer {
           resolvedInstances.resolvedInstances.removeAll()
           for (key, instance) in resolvedInstances.weakSingletons {
             if resolvedInstances.weakSingletons[key] is WeakBoxType { continue }
-            resolvedInstances.weakSingletons[key] = WeakBox(value: instance)
+            resolvedInstances.weakSingletons[key] = WeakBox(instance)
           }
           
           // We call didResolveDependencies only at this point
@@ -312,21 +323,18 @@ extension DependencyContainer {
    
    */
   public func register<T, U>(_ definition: DefinitionOf<T, (U) throws -> T>, forTag tag: DependencyTagConvertible? = nil) {
-    let key = DefinitionKey(protocolType: T.self, argumentsType: U.self, associatedTag: tag?.dependencyTag)
-    register(definition, forKey: key)
-
-    if case .EagerSingleton = definition.scope {
-      bootstrapQueue.append({ let _ = try self.resolve(tag: tag) as T })
-    }
-  }
-  
-  /// Actually register definition
-  func register(_ definition: _Definition, forKey key: DefinitionKey) {
     precondition(!bootstrapped, "You can not modify container's definitions after it was bootstrapped.")
     
     threadSafe {
+      let key = DefinitionKey(protocolType: T.self, argumentsType: U.self, associatedTag: tag?.dependencyTag)
+      
       definitions[key] = definition
       resolvedInstances.singletons[key] = nil
+      resolvedInstances.weakSingletons[key] = nil
+      
+      if case .EagerSingleton = definition.scope {
+        bootstrapQueue.append({ let _ = try self.resolve(tag: tag) as T })
+      }
     }
   }
   
@@ -527,6 +535,10 @@ extension DependencyContainer {
    */
   public func collaborate(with containers: [DependencyContainer]) {
     _collaborators += containers
+    for container in containers {
+      container.resolvedInstances.singletonsBox = self.resolvedInstances.singletonsBox
+      container.resolvedInstances.weakSingletonsBox = self.resolvedInstances.weakSingletonsBox
+    }
   }
   
   /// Tries to resolve key using collaborating containers
@@ -589,6 +601,7 @@ extension DependencyContainer {
     threadSafe {
       definitions[key] = nil
       resolvedInstances.singletons[key] = nil
+      resolvedInstances.weakSingletons[key] = nil
     }
   }
 
@@ -599,6 +612,7 @@ extension DependencyContainer {
     threadSafe {
       definitions.removeAll()
       resolvedInstances.singletons.removeAll()
+      resolvedInstances.weakSingletons.removeAll()
       bootstrapped = false
     }
   }
@@ -653,11 +667,23 @@ extension DependencyContainer {
 ///Pool to hold instances, created during call to `resolve()`.
 ///Before `resolve()` returns pool is drained.
 private class ResolvedInstances {
+  
   var resolvedInstances = [DefinitionKey: Any]()
-  var singletons = [DefinitionKey: Any]()
-  var weakSingletons = [DefinitionKey: Any]()
   var resolvableInstances = [Resolvable]()
   
+  //singletons are stored using reference type wrapper to be able to share them between containers
+  private var singletonsBox = Box<[DefinitionKey: Any]>([:])
+  var singletons: [DefinitionKey: Any] {
+    get { return singletonsBox.unboxed }
+    set { singletonsBox.unboxed = newValue }
+  }
+  
+  private var weakSingletonsBox = Box<[DefinitionKey: Any]>([:])
+  var weakSingletons: [DefinitionKey: Any] {
+    get { return weakSingletonsBox.unboxed }
+    set { weakSingletonsBox.unboxed = newValue }
+  }
+
   subscript(forKey key: DefinitionKey, inScope scope: ComponentScope) -> Any? {
     get {
       switch scope {
