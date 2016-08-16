@@ -1,0 +1,6 @@
+framework module Pods_ZombieInjectionTests {
+  umbrella header "Pods-ZombieInjectionTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

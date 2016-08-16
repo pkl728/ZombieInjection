@@ -1,0 +1,732 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3014D3541D49211300697BC3 /* ZombieServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3014D3531D49211300697BC3 /* ZombieServiceTests.swift */; };
+		3014D3571D4924A700697BC3 /* ZombieRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3014D3561D4924A700697BC3 /* ZombieRepositoryMock.swift */; };
+		304653D81D5A658300EA35C0 /* ZombieListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304653D71D5A658300EA35C0 /* ZombieListViewModelTests.swift */; };
+		304653DA1D5A67E500EA35C0 /* ZombieServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304653D91D5A67E500EA35C0 /* ZombieServiceMock.swift */; };
+		304653DC1D5A6B3700EA35C0 /* ZombieDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304653DB1D5A6B3700EA35C0 /* ZombieDetailViewModelTests.swift */; };
+		3072BB691D42733000CD9B26 /* ZombieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3072BB681D42733000CD9B26 /* ZombieService.swift */; };
+		3072BB6B1D4291A200CD9B26 /* DependencyContainer+Configure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3072BB6A1D4291A200CD9B26 /* DependencyContainer+Configure.swift */; };
+		308A4F7D1D5BAEA800E0B1A9 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 308A4F7C1D5BAEA800E0B1A9 /* DataService.swift */; };
+		3097D1301D61594C008D8B41 /* AlamofireImageServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3097D12F1D61594C008D8B41 /* AlamofireImageServiceTests.swift */; };
+		3097D1321D61EBC8008D8B41 /* ImageDownloaderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3097D1311D61EBC8008D8B41 /* ImageDownloaderMock.swift */; };
+		30CCFB381D5E0CAD00E9D37E /* InMemoryDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CCFB371D5E0CAD00E9D37E /* InMemoryDataService.swift */; };
+		30CCFB3A1D5E206400E9D37E /* ZombieRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CCFB391D5E206400E9D37E /* ZombieRepository.swift */; };
+		30CCFB3F1D5E29C300E9D37E /* ZombieListViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CCFB3E1D5E29C300E9D37E /* ZombieListViewControllerTests.swift */; };
+		30CCFB411D5E303200E9D37E /* ZombieDetailViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CCFB401D5E303200E9D37E /* ZombieDetailViewControllerTests.swift */; };
+		30CCFB431D5E3BC400E9D37E /* ZombieCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30CCFB421D5E3BC400E9D37E /* ZombieCellTests.swift */; };
+		30ED34071D2BE8E60065100D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30ED34061D2BE8E60065100D /* AppDelegate.swift */; };
+		30ED34091D2BE8E60065100D /* ZombieListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30ED34081D2BE8E60065100D /* ZombieListViewController.swift */; };
+		30ED340C1D2BE8E60065100D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30ED340A1D2BE8E60065100D /* Main.storyboard */; };
+		30ED340E1D2BE8E80065100D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 30ED340D1D2BE8E80065100D /* Assets.xcassets */; };
+		30ED34111D2BE8E80065100D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30ED340F1D2BE8E80065100D /* LaunchScreen.storyboard */; };
+		30ED342A1D2BEEF30065100D /* Zombie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30ED34291D2BEEF30065100D /* Zombie.swift */; };
+		30ED342C1D2BF08D0065100D /* ZombieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30ED342B1D2BF08D0065100D /* ZombieCell.swift */; };
+		30ED342E1D2BFE6C0065100D /* ZombieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30ED342D1D2BFE6C0065100D /* ZombieDetailViewController.swift */; };
+		30ED34301D2BFFD60065100D /* ZombieListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30ED342F1D2BFFD60065100D /* ZombieListViewModel.swift */; };
+		30ED34321D2BFFF20065100D /* ZombieDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30ED34311D2BFFF20065100D /* ZombieDetailViewModel.swift */; };
+		30F34B2C1D5E53C500761154 /* AlamofireImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F34B2B1D5E53C500761154 /* AlamofireImageService.swift */; };
+		30F34B301D5E5F9100761154 /* ImageDownloadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30F34B2F1D5E5F9100761154 /* ImageDownloadable.swift */; };
+		30FC9EC21D381AE400B3A459 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FC9EC11D381AE400B3A459 /* Repository.swift */; };
+		30FC9ECD1D395A3C00B3A459 /* Persistable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30FC9ECC1D395A3C00B3A459 /* Persistable.swift */; };
+		4B6C43ABFB2D26E7B8870C31 /* Pods_ZombieInjection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B3BC80F622338982D9C2B8D /* Pods_ZombieInjection.framework */; };
+		5AACD2A118E6F30BD74C7D1D /* Pods_ZombieInjectionTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EB44CF4AF87666582754A4 /* Pods_ZombieInjectionTests.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		30ED34181D2BE8E80065100D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 30ED33FB1D2BE8E60065100D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 30ED34021D2BE8E60065100D;
+			remoteInfo = ZombieInjection;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0B3BC80F622338982D9C2B8D /* Pods_ZombieInjection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZombieInjection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3014D3531D49211300697BC3 /* ZombieServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieServiceTests.swift; sourceTree = "<group>"; };
+		3014D3561D4924A700697BC3 /* ZombieRepositoryMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieRepositoryMock.swift; sourceTree = "<group>"; };
+		304653D71D5A658300EA35C0 /* ZombieListViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieListViewModelTests.swift; sourceTree = "<group>"; };
+		304653D91D5A67E500EA35C0 /* ZombieServiceMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieServiceMock.swift; sourceTree = "<group>"; };
+		304653DB1D5A6B3700EA35C0 /* ZombieDetailViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieDetailViewModelTests.swift; sourceTree = "<group>"; };
+		3072BB681D42733000CD9B26 /* ZombieService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieService.swift; sourceTree = "<group>"; };
+		3072BB6A1D4291A200CD9B26 /* DependencyContainer+Configure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DependencyContainer+Configure.swift"; sourceTree = "<group>"; };
+		308A4F7C1D5BAEA800E0B1A9 /* DataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
+		3097D12F1D61594C008D8B41 /* AlamofireImageServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireImageServiceTests.swift; sourceTree = "<group>"; };
+		3097D1311D61EBC8008D8B41 /* ImageDownloaderMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloaderMock.swift; sourceTree = "<group>"; };
+		30CCFB371D5E0CAD00E9D37E /* InMemoryDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InMemoryDataService.swift; sourceTree = "<group>"; };
+		30CCFB391D5E206400E9D37E /* ZombieRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieRepository.swift; sourceTree = "<group>"; };
+		30CCFB3E1D5E29C300E9D37E /* ZombieListViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieListViewControllerTests.swift; sourceTree = "<group>"; };
+		30CCFB401D5E303200E9D37E /* ZombieDetailViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieDetailViewControllerTests.swift; sourceTree = "<group>"; };
+		30CCFB421D5E3BC400E9D37E /* ZombieCellTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieCellTests.swift; sourceTree = "<group>"; };
+		30ED34031D2BE8E60065100D /* ZombieInjection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZombieInjection.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		30ED34061D2BE8E60065100D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		30ED34081D2BE8E60065100D /* ZombieListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZombieListViewController.swift; sourceTree = "<group>"; };
+		30ED340B1D2BE8E60065100D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		30ED340D1D2BE8E80065100D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		30ED34101D2BE8E80065100D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		30ED34121D2BE8E80065100D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		30ED34171D2BE8E80065100D /* ZombieInjectionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZombieInjectionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		30ED341D1D2BE8E80065100D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		30ED34291D2BEEF30065100D /* Zombie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Zombie.swift; sourceTree = "<group>"; };
+		30ED342B1D2BF08D0065100D /* ZombieCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieCell.swift; sourceTree = "<group>"; };
+		30ED342D1D2BFE6C0065100D /* ZombieDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieDetailViewController.swift; sourceTree = "<group>"; };
+		30ED342F1D2BFFD60065100D /* ZombieListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieListViewModel.swift; sourceTree = "<group>"; };
+		30ED34311D2BFFF20065100D /* ZombieDetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieDetailViewModel.swift; sourceTree = "<group>"; };
+		30F34B2B1D5E53C500761154 /* AlamofireImageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireImageService.swift; sourceTree = "<group>"; };
+		30F34B2F1D5E5F9100761154 /* ImageDownloadable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloadable.swift; sourceTree = "<group>"; };
+		30FC9EC11D381AE400B3A459 /* Repository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
+		30FC9ECC1D395A3C00B3A459 /* Persistable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Persistable.swift; sourceTree = "<group>"; };
+		55615BB8CB6220C6DA131D79 /* Pods-ZombieInjection.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZombieInjection.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZombieInjection/Pods-ZombieInjection.debug.xcconfig"; sourceTree = "<group>"; };
+		AC717B63CC25DE4E9CAD3D57 /* Pods-ZombieInjectionTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZombieInjectionTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZombieInjectionTests/Pods-ZombieInjectionTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B863EA36E20218A570D40161 /* Pods-ZombieInjectionTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZombieInjectionTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZombieInjectionTests/Pods-ZombieInjectionTests.release.xcconfig"; sourceTree = "<group>"; };
+		BA64EAF9C73E08E12B56EB2D /* Pods-ZombieInjection.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZombieInjection.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZombieInjection/Pods-ZombieInjection.release.xcconfig"; sourceTree = "<group>"; };
+		D8EB44CF4AF87666582754A4 /* Pods_ZombieInjectionTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZombieInjectionTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		30ED34001D2BE8E60065100D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B6C43ABFB2D26E7B8870C31 /* Pods_ZombieInjection.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		30ED34141D2BE8E80065100D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5AACD2A118E6F30BD74C7D1D /* Pods_ZombieInjectionTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		108240B2A3F50C760766D8CE /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				55615BB8CB6220C6DA131D79 /* Pods-ZombieInjection.debug.xcconfig */,
+				BA64EAF9C73E08E12B56EB2D /* Pods-ZombieInjection.release.xcconfig */,
+				AC717B63CC25DE4E9CAD3D57 /* Pods-ZombieInjectionTests.debug.xcconfig */,
+				B863EA36E20218A570D40161 /* Pods-ZombieInjectionTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		3014D3551D49248C00697BC3 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				3014D3561D4924A700697BC3 /* ZombieRepositoryMock.swift */,
+				304653D91D5A67E500EA35C0 /* ZombieServiceMock.swift */,
+				3097D1311D61EBC8008D8B41 /* ImageDownloaderMock.swift */,
+			);
+			name = Mocks;
+			sourceTree = "<group>";
+		};
+		308A4F751D5BABED00E0B1A9 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3014D3531D49211300697BC3 /* ZombieServiceTests.swift */,
+				3097D12F1D61594C008D8B41 /* AlamofireImageServiceTests.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		308A4F761D5BAC0400E0B1A9 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				304653D71D5A658300EA35C0 /* ZombieListViewModelTests.swift */,
+				304653DB1D5A6B3700EA35C0 /* ZombieDetailViewModelTests.swift */,
+			);
+			name = ViewModels;
+			sourceTree = "<group>";
+		};
+		308A4F771D5BAC3E00E0B1A9 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Repositories;
+			sourceTree = "<group>";
+		};
+		30CCFB3D1D5E298500E9D37E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				30CCFB3E1D5E29C300E9D37E /* ZombieListViewControllerTests.swift */,
+				30CCFB401D5E303200E9D37E /* ZombieDetailViewControllerTests.swift */,
+				30CCFB421D5E3BC400E9D37E /* ZombieCellTests.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		30ED33FA1D2BE8E60065100D = {
+			isa = PBXGroup;
+			children = (
+				30ED34051D2BE8E60065100D /* ZombieInjection */,
+				30ED341A1D2BE8E80065100D /* ZombieInjectionTests */,
+				30ED34041D2BE8E60065100D /* Products */,
+				108240B2A3F50C760766D8CE /* Pods */,
+				F151F7241E4977164B19A366 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		30ED34041D2BE8E60065100D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				30ED34031D2BE8E60065100D /* ZombieInjection.app */,
+				30ED34171D2BE8E80065100D /* ZombieInjectionTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		30ED34051D2BE8E60065100D /* ZombieInjection */ = {
+			isa = PBXGroup;
+			children = (
+				30FC9EC51D39203500B3A459 /* Services */,
+				30FC9EC01D381A0C00B3A459 /* Repositories */,
+				30ED34281D2BED4D0065100D /* Views */,
+				30ED34271D2BED420065100D /* ViewModels */,
+				30ED34261D2BED3C0065100D /* Models */,
+				30ED34061D2BE8E60065100D /* AppDelegate.swift */,
+				30ED340A1D2BE8E60065100D /* Main.storyboard */,
+				30ED340D1D2BE8E80065100D /* Assets.xcassets */,
+				30ED340F1D2BE8E80065100D /* LaunchScreen.storyboard */,
+				30ED34121D2BE8E80065100D /* Info.plist */,
+				3072BB6A1D4291A200CD9B26 /* DependencyContainer+Configure.swift */,
+			);
+			path = ZombieInjection;
+			sourceTree = "<group>";
+		};
+		30ED341A1D2BE8E80065100D /* ZombieInjectionTests */ = {
+			isa = PBXGroup;
+			children = (
+				30CCFB3D1D5E298500E9D37E /* Views */,
+				308A4F771D5BAC3E00E0B1A9 /* Repositories */,
+				308A4F761D5BAC0400E0B1A9 /* ViewModels */,
+				308A4F751D5BABED00E0B1A9 /* Services */,
+				3014D3551D49248C00697BC3 /* Mocks */,
+				30ED341D1D2BE8E80065100D /* Info.plist */,
+			);
+			path = ZombieInjectionTests;
+			sourceTree = "<group>";
+		};
+		30ED34261D2BED3C0065100D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				30ED34291D2BEEF30065100D /* Zombie.swift */,
+				30FC9ECC1D395A3C00B3A459 /* Persistable.swift */,
+				30F34B2F1D5E5F9100761154 /* ImageDownloadable.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		30ED34271D2BED420065100D /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				30ED342F1D2BFFD60065100D /* ZombieListViewModel.swift */,
+				30ED34311D2BFFF20065100D /* ZombieDetailViewModel.swift */,
+			);
+			name = ViewModels;
+			sourceTree = "<group>";
+		};
+		30ED34281D2BED4D0065100D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				30ED34081D2BE8E60065100D /* ZombieListViewController.swift */,
+				30ED342B1D2BF08D0065100D /* ZombieCell.swift */,
+				30ED342D1D2BFE6C0065100D /* ZombieDetailViewController.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		30FC9EC01D381A0C00B3A459 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				30FC9EC11D381AE400B3A459 /* Repository.swift */,
+				30CCFB391D5E206400E9D37E /* ZombieRepository.swift */,
+			);
+			name = Repositories;
+			sourceTree = "<group>";
+		};
+		30FC9EC51D39203500B3A459 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3072BB681D42733000CD9B26 /* ZombieService.swift */,
+				308A4F7C1D5BAEA800E0B1A9 /* DataService.swift */,
+				30CCFB371D5E0CAD00E9D37E /* InMemoryDataService.swift */,
+				30F34B2B1D5E53C500761154 /* AlamofireImageService.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		F151F7241E4977164B19A366 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0B3BC80F622338982D9C2B8D /* Pods_ZombieInjection.framework */,
+				D8EB44CF4AF87666582754A4 /* Pods_ZombieInjectionTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		30ED34021D2BE8E60065100D /* ZombieInjection */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 30ED34201D2BE8E80065100D /* Build configuration list for PBXNativeTarget "ZombieInjection" */;
+			buildPhases = (
+				37CEE4541A1FC254FB0BE3BB /* [CP] Check Pods Manifest.lock */,
+				30ED33FF1D2BE8E60065100D /* Sources */,
+				30ED34001D2BE8E60065100D /* Frameworks */,
+				30ED34011D2BE8E60065100D /* Resources */,
+				9DBD169DE0A9594DD42EB130 /* [CP] Embed Pods Frameworks */,
+				33F5F802D57AD0438E367161 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ZombieInjection;
+			productName = ZombieInjection;
+			productReference = 30ED34031D2BE8E60065100D /* ZombieInjection.app */;
+			productType = "com.apple.product-type.application";
+		};
+		30ED34161D2BE8E80065100D /* ZombieInjectionTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 30ED34231D2BE8E80065100D /* Build configuration list for PBXNativeTarget "ZombieInjectionTests" */;
+			buildPhases = (
+				4236FC98155BF5AD11A8891E /* [CP] Check Pods Manifest.lock */,
+				30ED34131D2BE8E80065100D /* Sources */,
+				30ED34141D2BE8E80065100D /* Frameworks */,
+				30ED34151D2BE8E80065100D /* Resources */,
+				CC16BF054D08D8341DC41C55 /* [CP] Embed Pods Frameworks */,
+				46691C03C2867746EF932624 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				30ED34191D2BE8E80065100D /* PBXTargetDependency */,
+			);
+			name = ZombieInjectionTests;
+			productName = ZombieInjectionTests;
+			productReference = 30ED34171D2BE8E80065100D /* ZombieInjectionTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		30ED33FB1D2BE8E60065100D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = "Patrick Lind";
+				TargetAttributes = {
+					30ED34021D2BE8E60065100D = {
+						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
+					};
+					30ED34161D2BE8E80065100D = {
+						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
+						TestTargetID = 30ED34021D2BE8E60065100D;
+					};
+				};
+			};
+			buildConfigurationList = 30ED33FE1D2BE8E60065100D /* Build configuration list for PBXProject "ZombieInjection" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 30ED33FA1D2BE8E60065100D;
+			productRefGroup = 30ED34041D2BE8E60065100D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				30ED34021D2BE8E60065100D /* ZombieInjection */,
+				30ED34161D2BE8E80065100D /* ZombieInjectionTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		30ED34011D2BE8E60065100D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				30ED34111D2BE8E80065100D /* LaunchScreen.storyboard in Resources */,
+				30ED340E1D2BE8E80065100D /* Assets.xcassets in Resources */,
+				30ED340C1D2BE8E60065100D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		30ED34151D2BE8E80065100D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		33F5F802D57AD0438E367161 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZombieInjection/Pods-ZombieInjection-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		37CEE4541A1FC254FB0BE3BB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		4236FC98155BF5AD11A8891E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		46691C03C2867746EF932624 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZombieInjectionTests/Pods-ZombieInjectionTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9DBD169DE0A9594DD42EB130 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZombieInjection/Pods-ZombieInjection-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CC16BF054D08D8341DC41C55 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZombieInjectionTests/Pods-ZombieInjectionTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		30ED33FF1D2BE8E60065100D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				30ED34301D2BFFD60065100D /* ZombieListViewModel.swift in Sources */,
+				30F34B301D5E5F9100761154 /* ImageDownloadable.swift in Sources */,
+				30ED342A1D2BEEF30065100D /* Zombie.swift in Sources */,
+				30ED34321D2BFFF20065100D /* ZombieDetailViewModel.swift in Sources */,
+				308A4F7D1D5BAEA800E0B1A9 /* DataService.swift in Sources */,
+				30ED342E1D2BFE6C0065100D /* ZombieDetailViewController.swift in Sources */,
+				30ED342C1D2BF08D0065100D /* ZombieCell.swift in Sources */,
+				30CCFB381D5E0CAD00E9D37E /* InMemoryDataService.swift in Sources */,
+				30F34B2C1D5E53C500761154 /* AlamofireImageService.swift in Sources */,
+				30FC9EC21D381AE400B3A459 /* Repository.swift in Sources */,
+				30ED34091D2BE8E60065100D /* ZombieListViewController.swift in Sources */,
+				30CCFB3A1D5E206400E9D37E /* ZombieRepository.swift in Sources */,
+				3072BB6B1D4291A200CD9B26 /* DependencyContainer+Configure.swift in Sources */,
+				30ED34071D2BE8E60065100D /* AppDelegate.swift in Sources */,
+				30FC9ECD1D395A3C00B3A459 /* Persistable.swift in Sources */,
+				3072BB691D42733000CD9B26 /* ZombieService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		30ED34131D2BE8E80065100D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3097D1301D61594C008D8B41 /* AlamofireImageServiceTests.swift in Sources */,
+				30CCFB3F1D5E29C300E9D37E /* ZombieListViewControllerTests.swift in Sources */,
+				30CCFB431D5E3BC400E9D37E /* ZombieCellTests.swift in Sources */,
+				304653D81D5A658300EA35C0 /* ZombieListViewModelTests.swift in Sources */,
+				3014D3571D4924A700697BC3 /* ZombieRepositoryMock.swift in Sources */,
+				304653DC1D5A6B3700EA35C0 /* ZombieDetailViewModelTests.swift in Sources */,
+				30CCFB411D5E303200E9D37E /* ZombieDetailViewControllerTests.swift in Sources */,
+				3014D3541D49211300697BC3 /* ZombieServiceTests.swift in Sources */,
+				3097D1321D61EBC8008D8B41 /* ImageDownloaderMock.swift in Sources */,
+				304653DA1D5A67E500EA35C0 /* ZombieServiceMock.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		30ED34191D2BE8E80065100D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 30ED34021D2BE8E60065100D /* ZombieInjection */;
+			targetProxy = 30ED34181D2BE8E80065100D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		30ED340A1D2BE8E60065100D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				30ED340B1D2BE8E60065100D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		30ED340F1D2BE8E80065100D /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				30ED34101D2BE8E80065100D /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		30ED341E1D2BE8E80065100D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		30ED341F1D2BE8E80065100D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		30ED34211D2BE8E80065100D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 55615BB8CB6220C6DA131D79 /* Pods-ZombieInjection.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = ZombieInjection/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.picklesoftware.ZombieInjection;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		30ED34221D2BE8E80065100D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BA64EAF9C73E08E12B56EB2D /* Pods-ZombieInjection.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = ZombieInjection/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.picklesoftware.ZombieInjection;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		30ED34241D2BE8E80065100D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AC717B63CC25DE4E9CAD3D57 /* Pods-ZombieInjectionTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = ZombieInjectionTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.picklesoftware.ZombieInjectionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ZombieInjection.app/ZombieInjection";
+			};
+			name = Debug;
+		};
+		30ED34251D2BE8E80065100D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B863EA36E20218A570D40161 /* Pods-ZombieInjectionTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = ZombieInjectionTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.picklesoftware.ZombieInjectionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ZombieInjection.app/ZombieInjection";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		30ED33FE1D2BE8E60065100D /* Build configuration list for PBXProject "ZombieInjection" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				30ED341E1D2BE8E80065100D /* Debug */,
+				30ED341F1D2BE8E80065100D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		30ED34201D2BE8E80065100D /* Build configuration list for PBXNativeTarget "ZombieInjection" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				30ED34211D2BE8E80065100D /* Debug */,
+				30ED34221D2BE8E80065100D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		30ED34231D2BE8E80065100D /* Build configuration list for PBXNativeTarget "ZombieInjectionTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				30ED34241D2BE8E80065100D /* Debug */,
+				30ED34251D2BE8E80065100D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 30ED33FB1D2BE8E60065100D /* Project object */;
+}

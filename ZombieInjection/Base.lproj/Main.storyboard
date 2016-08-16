@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11191" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="h7e-3U-YcG">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11156"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="3mX-3d-O6d">
+            <objects>
+                <navigationController id="h7e-3U-YcG" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="DQy-E1-D8h">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="Jew-hd-QTo"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="csa-Jo-Jqq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="968" y="439"/>
+        </scene>
+        <!--Zombies-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController storyboardIdentifier="ZombieList" id="BYZ-38-t0r" customClass="ZombieListViewController" customModule="ZombieInjection" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="160" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bF2-3h-qqn">
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="ZombieCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="ZombieCell" id="eXv-bL-2nC" customClass="ZombieCell" customModule="ZombieInjection" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="92" width="343" height="160"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" tableViewCell="eXv-bL-2nC" id="N5K-rn-AWf">
+                                            <frame key="frameInset" width="343" height="159"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f3y-rm-ywd">
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Hge-dB-1mX"/>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="f3y-rm-ywd" secondAttribute="trailing" id="44u-Eg-Tc2"/>
+                                                <constraint firstItem="f3y-rm-ywd" firstAttribute="top" secondItem="N5K-rn-AWf" secondAttribute="topMargin" constant="8" id="4yW-QN-Nkq"/>
+                                                <constraint firstItem="f3y-rm-ywd" firstAttribute="leading" secondItem="Hge-dB-1mX" secondAttribute="trailing" constant="8" id="9Z7-Jv-z8k"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="f3y-rm-ywd" secondAttribute="bottom" constant="114" id="FTf-1z-tXb"/>
+                                                <constraint firstAttribute="leadingMargin" secondItem="Hge-dB-1mX" secondAttribute="leading" id="Hxm-It-Ok7"/>
+                                                <constraint firstItem="f3y-rm-ywd" firstAttribute="leading" secondItem="N5K-rn-AWf" secondAttribute="leadingMargin" constant="136" id="gnK-RX-NnE"/>
+                                                <constraint firstItem="Hge-dB-1mX" firstAttribute="top" secondItem="N5K-rn-AWf" secondAttribute="topMargin" constant="8" id="oMc-bC-ata"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Hge-dB-1mX" secondAttribute="bottom" constant="7" id="y8N-ho-W7b"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="zombieImageView" destination="Hge-dB-1mX" id="7Yx-3E-NTZ"/>
+                                            <outlet property="zombieNameLabel" destination="f3y-rm-ywd" id="Bew-Be-LHn"/>
+                                            <segue destination="4tf-Zy-D4g" kind="show" identifier="ShowZombieDetails" id="5P9-ae-diI"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="bF2-3h-qqn" secondAttribute="bottom" constant="8" id="3Jp-SQ-xwo"/>
+                            <constraint firstItem="bF2-3h-qqn" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Cjv-80-o8L"/>
+                            <constraint firstItem="bF2-3h-qqn" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="dtW-88-4EL"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="bF2-3h-qqn" secondAttribute="leading" id="mT1-ig-Xxy"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="bF2-3h-qqn" secondAttribute="trailing" id="p2E-q4-M2J"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Zombies" id="qyD-dX-3vB"/>
+                    <connections>
+                        <outlet property="zombieTableView" destination="bF2-3h-qqn" id="Cnh-oR-fA3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1764" y="439"/>
+        </scene>
+        <!--Zombie Detail-->
+        <scene sceneID="vhq-qr-GDe">
+            <objects>
+                <viewController storyboardIdentifier="ZombieDetail" title="Zombie Detail" id="4tf-Zy-D4g" customClass="ZombieDetailViewController" customModule="ZombieInjection" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Skv-zw-Z4h"/>
+                        <viewControllerLayoutGuide type="bottom" id="nK3-pf-XXc"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="SQ8-ja-9Em">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="atm-92-XFV"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DI4-wX-Ze1">
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="atm-92-XFV" secondAttribute="trailing" constant="80" id="7RG-HY-eOA"/>
+                            <constraint firstItem="atm-92-XFV" firstAttribute="top" secondItem="Skv-zw-Z4h" secondAttribute="bottom" constant="8" id="FRm-hz-DxZ"/>
+                            <constraint firstItem="nK3-pf-XXc" firstAttribute="top" secondItem="atm-92-XFV" secondAttribute="bottom" constant="128" id="a5O-6B-c9H"/>
+                            <constraint firstItem="DI4-wX-Ze1" firstAttribute="leading" secondItem="SQ8-ja-9Em" secondAttribute="leadingMargin" constant="80" id="ced-aM-5uZ"/>
+                            <constraint firstItem="nK3-pf-XXc" firstAttribute="top" secondItem="DI4-wX-Ze1" secondAttribute="bottom" constant="90" id="dfe-h2-Zb9"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="DI4-wX-Ze1" secondAttribute="trailing" constant="80" id="hpo-aJ-dId"/>
+                            <constraint firstItem="atm-92-XFV" firstAttribute="leading" secondItem="SQ8-ja-9Em" secondAttribute="leadingMargin" constant="80" id="kMR-MC-HcX"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Zombie Detail" id="uWr-Ro-6aW">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="1yb-hu-k4r"/>
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="YSs-P0-Wun">
+                            <connections>
+                                <action selector="saveAction:" destination="4tf-Zy-D4g" id="Yg9-vG-0av"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="zombieImageView" destination="atm-92-XFV" id="6gF-Z9-mvw"/>
+                        <outlet property="zombieNameTextField" destination="DI4-wX-Ze1" id="t4i-VW-7hT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Wem-C3-JFp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2539.5" y="438.5"/>
+        </scene>
+    </scenes>
+</document>

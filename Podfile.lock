@@ -1,0 +1,46 @@
+PODS:
+  - Alamofire (3.4.1)
+  - AlamofireImage (2.4.1):
+    - Alamofire (~> 3.3)
+  - Bond (4.3.1)
+  - Dip (4.6.0)
+
+DEPENDENCIES:
+  - Alamofire (from `https://github.com/Alamofire/Alamofire.git`, branch `swift3`)
+  - AlamofireImage (from `https://github.com/Alamofire/AlamofireImage.git`, branch `swift3`)
+  - Bond (from `~/Projects/Bond`)
+  - Dip (from `https://github.com/patrick-lind/Dip.git`, branch `feature/swift3`)
+
+EXTERNAL SOURCES:
+  Alamofire:
+    :branch: swift3
+    :git: https://github.com/Alamofire/Alamofire.git
+  AlamofireImage:
+    :branch: swift3
+    :git: https://github.com/Alamofire/AlamofireImage.git
+  Bond:
+    :path: "~/Projects/Bond"
+  Dip:
+    :branch: feature/swift3
+    :git: https://github.com/patrick-lind/Dip.git
+
+CHECKOUT OPTIONS:
+  Alamofire:
+    :commit: a94323c6e556d47408b6186c948324b040d7ffc8
+    :git: https://github.com/Alamofire/Alamofire.git
+  AlamofireImage:
+    :commit: 81692bbc6bcba15133809310404cd4784a7450c7
+    :git: https://github.com/Alamofire/AlamofireImage.git
+  Dip:
+    :commit: 78c628c6fa26155b111696e992586e28bacf5cdd
+    :git: https://github.com/patrick-lind/Dip.git
+
+SPEC CHECKSUMS:
+  Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
+  AlamofireImage: 3ccf3347d9ea24580dc11fb892770a0be6a29826
+  Bond: 55903fc67f09e8e49791a657163cabba1d6fb29d
+  Dip: 0ad6f83e1989af520bcaaf1b56e54034b1533057
+
+PODFILE CHECKSUM: 9645b874eb27dcbfe8e5d9c42a8b32a224a45cbe
+
+COCOAPODS: 1.0.1
