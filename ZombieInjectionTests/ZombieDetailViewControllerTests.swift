@@ -51,7 +51,7 @@ class ZombieDetailViewControllerTests: XCTestCase {
         detailViewController.viewDidLoad()
         
         // Assert
-        XCTAssertEqual("Test", detailViewController.zombieNameTextField.text.value)
+        XCTAssertEqual("Test", detailViewController.zombieNameTextField.text)
     }
     
     func testSaveButtonExecutes() {
@@ -62,7 +62,7 @@ class ZombieDetailViewControllerTests: XCTestCase {
         detailViewController.viewModel = viewModel
 
         // Act
-        detailViewController.saveAction(goBackCalled)
+        detailViewController.saveAction(goBackCalled as AnyObject)
         
         // Assert
         XCTAssertEqual(true, goBackCalled)

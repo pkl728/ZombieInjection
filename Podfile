@@ -14,6 +14,7 @@ target 'ZombieInjection' do
   target 'ZombieInjectionTests' do
     inherit! :search_paths
     # Pods for testing
+    pod 'Bond', '~> 6.0'
   end
 
 end

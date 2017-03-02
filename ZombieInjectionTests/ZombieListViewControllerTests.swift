@@ -37,12 +37,15 @@ class ZombieListViewControllerTests: XCTestCase {
     
     func testHasSegueWithIdentifierZombieDetails() {
         // Arrange
-        let segues = viewController.value(forKey: "storyboardSegueTemplates") as? [NSObject]
+        guard let segues = viewController.value(forKey: "storyboardSegueTemplates") as? [NSObject] else {
+            assertionFailure("Segue not successfully completed")
+            return
+        }
         
         // Act
-        let filtered = segues?.filter({ $0.value(forKey: "identifier") as? String == "ShowZombieDetails" })
+        let filtered = segues.filter({ $0.value(forKey: "identifier") as? String == "ShowZombieDetails" })
         
         // Assert
-        XCTAssert(filtered?.count > 0)
+        XCTAssert(filtered.count > 0)
     }
 }

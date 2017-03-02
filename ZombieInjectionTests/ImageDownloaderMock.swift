@@ -16,21 +16,20 @@ class ImageDownloaderMock: ImageDownloader {
     
     public var responseIsSuccess = true
     
-    override func downloadImage(urlRequest: URLRequestConvertible, receiptID: String, filter: ImageFilter?, progress: ProgressHandler?, progressQueue: DispatchQueue, completion: CompletionHandler?) -> RequestReceipt? {
-        
+    override func download(_ urlRequest: URLRequestConvertible, receiptID: String, filter: ImageFilter?, progress: ImageDownloader.ProgressHandler?, progressQueue: DispatchQueue, completion: ImageDownloader.CompletionHandler?) -> RequestReceipt? {
         let response = self.responseIsSuccess ? setupSucessResponse(urlRequest: urlRequest) : setupFailureResponse(urlRequest: urlRequest)
         completion?(response)
         return nil
     }
     
-    func setupSucessResponse(urlRequest: URLRequestConvertible) -> Response<Image, NSError> {
-        let response = Response<Image, NSError>(request: urlRequest.urlRequest, response: nil, data: nil, result: .success(image))
+    func setupSucessResponse(urlRequest: URLRequestConvertible) -> DataResponse<Image> {
+        let response = DataResponse<Image>(request: urlRequest.urlRequest, response: nil, data: nil, result: .success(image))
         return response
     }
     
-    func setupFailureResponse(urlRequest: URLRequestConvertible) -> Response<Image, NSError> {
+    func setupFailureResponse(urlRequest: URLRequestConvertible) -> DataResponse<Image> {
         let error = NSError(domain: "Testing", code: NSURLErrorCancelled, userInfo: nil)
-        let response = Response<Image, NSError>(request: urlRequest.urlRequest, response: nil, data: nil, result: .failure(error))
+        let response = DataResponse<Image>(request: urlRequest.urlRequest, response: nil, data: nil, result: .failure(error))
         return response
     }
     
