@@ -1,50 +1,28 @@
 PODS:
-  - Alamofire (4.0.0)
-  - AlamofireImage (2.4.1):
-    - Alamofire (~> 4.0)
-  - Bond (4.3.1)
-  - Dip (4.6.0)
+  - Alamofire (4.4.0)
+  - AlamofireImage (3.2.0):
+    - Alamofire (~> 4.1)
+  - Bond (6.0.4):
+    - Diff (~> 0.4)
+    - ReactiveKit (~> 3.3)
+  - Diff (0.5.0)
+  - Dip (5.0.4)
+  - ReactiveKit (3.3.1)
 
 DEPENDENCIES:
-  - Alamofire (from `https://github.com/Alamofire/Alamofire.git`, branch `swift3`)
-  - AlamofireImage (from `https://github.com/pkl728/AlamofireImage.git`, branch `swift3`)
-  - Bond (from `https://github.com/pkl728/Bond.git`, branch `swift3`)
-  - Dip (from `https://github.com/AliSoftware/Dip.git`, branch `feature/swift3`)
-
-EXTERNAL SOURCES:
-  Alamofire:
-    :branch: swift3
-    :git: https://github.com/Alamofire/Alamofire.git
-  AlamofireImage:
-    :branch: swift3
-    :git: https://github.com/pkl728/AlamofireImage.git
-  Bond:
-    :branch: swift3
-    :git: https://github.com/pkl728/Bond.git
-  Dip:
-    :branch: feature/swift3
-    :git: https://github.com/AliSoftware/Dip.git
-
-CHECKOUT OPTIONS:
-  Alamofire:
-    :commit: 138058fd93487e695d267a9733b0cdfcde25b0d3
-    :git: https://github.com/Alamofire/Alamofire.git
-  AlamofireImage:
-    :commit: e44a6ccb3b69b1067bc33ac362307ae06e99e0e3
-    :git: https://github.com/pkl728/AlamofireImage.git
-  Bond:
-    :commit: 418e1e030d41110371ec45b4b204da2d1e3b61fd
-    :git: https://github.com/pkl728/Bond.git
-  Dip:
-    :commit: 33244d4c49f5f4a9b40f76f3bad5687329f3b495
-    :git: https://github.com/AliSoftware/Dip.git
+  - Alamofire (~> 4.4)
+  - AlamofireImage (~> 3.2)
+  - Bond (~> 6.0)
+  - Dip (~> 5.0)
 
 SPEC CHECKSUMS:
-  Alamofire: fef59f00388f267e52d9b432aa5d93dc97190f14
-  AlamofireImage: c89e237ea56cad35c205469f108ed424d058e218
-  Bond: 55903fc67f09e8e49791a657163cabba1d6fb29d
-  Dip: 0ad6f83e1989af520bcaaf1b56e54034b1533057
+  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  AlamofireImage: 157ed682cc81d3b9db4fb90c1f12180ac552d93b
+  Bond: bc982d559e9c7fe30f50c29bbb5396ded9529699
+  Diff: eceb93a3adf508574ba9b8560da185ace83de055
+  Dip: 6460091adcf84ae8765f4927b85b49e6a3b67bfe
+  ReactiveKit: 27df79c2e2f0771aef1061551fcd7e82b92066e9
 
-PODFILE CHECKSUM: b166bb72f3e5ecf8c3d71e7b2418f5aa958f08be
+PODFILE CHECKSUM: b0886606d188ec946b47ed350ee8f3451767402f
 
-COCOAPODS: 1.1.0.beta.1
+COCOAPODS: 1.2.0

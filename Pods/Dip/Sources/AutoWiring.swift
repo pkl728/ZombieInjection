@@ -22,115 +22,54 @@
 // THE SOFTWARE.
 //
 
-protocol AutoWiringDefinition: Definition {
-  var numberOfArguments: Int? { get }
+protocol AutoWiringDefinition: DefinitionType {
+  var numberOfArguments: Int { get }
   var autoWiringFactory: ((DependencyContainer, DependencyContainer.Tag?) throws -> Any)? { get }
-}
-
-extension AutoWiringDefinition {
-  func supportsAutoWiring() -> Bool {
-    return autoWiringFactory != nil && numberOfArguments > 0
-  }
 }
 
 extension DependencyContainer {
   
-  /// Tries to resolve instance using auto-wire factories
-  func autowire<T>(_ key: DefinitionKey) throws -> T {
-    let shouldLogErrors = context.logErrors
-    defer { context.logErrors = shouldLogErrors }
-    context.logErrors = false
-    
-    guard key.argumentsType == Void.self else {
-      throw DipError.DefinitionNotFound(key: key)
+  /// Tries to resolve instance using auto-wiring
+  func autowire<T>(key aKey: DefinitionKey) throws -> T {
+    let key = aKey
+    guard key.typeOfArguments == Void.self else {
+      throw DipError.definitionNotFound(key: key)
     }
     
-    let tag = key.associatedTag
-    let type = key.protocolType
-    let resolved: Any?
+    let autoWiringKey = try autoWiringDefinition(byKey: key).key
+    
     do {
-      let definitions = autoWiringDefinitions(type, tag: tag)
-      resolved = try resolve(enumerating: definitions) { try resolveKey($0, tag: tag, type: type) }
+      let key = autoWiringKey.tagged(with: key.tag ?? context.tag)
+      return try _resolve(key: key) { definition in
+        try definition.autoWiringFactory!(self, key.tag) as! T
+      }
     }
     catch {
-      throw DipError.AutoWiringFailed(type: type, underlyingError: error)
-    }
-    
-    if let resolved = resolved as? T  {
-      return resolved
-    }
-    else {
-      throw DipError.DefinitionNotFound(key: key)
+      throw DipError.autoWiringFailed(type: key.type, underlyingError: error)
     }
   }
 
-  private func autoWiringDefinitions(_ type: Any.Type, tag: DependencyContainer.Tag?) -> [KeyDefinitionPair] {
+  private func autoWiringDefinition(byKey key: DefinitionKey) throws -> KeyDefinitionPair {
     var definitions = self.definitions.map({ (key: $0.0, definition: $0.1) })
     
-    //filter definitions
-    definitions = definitions
-      .filter({ $0.definition.supportsAutoWiring() })
-      .sorted(by: { $0.definition.numberOfArguments > $1.definition.numberOfArguments })
-    
-    definitions = filter(definitions, type: type, tag: tag)
-    definitions = order(definitions, tag: tag)
+    definitions = filter(definitions: definitions, byKey: key)
+    definitions = definitions.sorted(by: { $0.definition.numberOfArguments > $1.definition.numberOfArguments })
 
-    return definitions
-  }
-  
-  /// Enumerates definitions one by one until one of them succeeds, otherwise returns nil
-  private func resolve(enumerating keyDefinitionPairs: [KeyDefinitionPair], block: @noescape (DefinitionKey) throws -> Any?) throws -> Any? {
-    for (index, keyDefinitionPair) in keyDefinitionPairs.enumerated() {
-      //If the next definition matches current definition then they are ambigous
-      if let nextPair = keyDefinitionPairs[next: index], case keyDefinitionPair = nextPair {
-          throw DipError.AmbiguousDefinitions(
-            type: keyDefinitionPair.key.protocolType,
-            definitions: [keyDefinitionPair.definition, nextPair.definition]
-        )
-      }
-      
-      if let resolved = try block(keyDefinitionPair.key) {
-        return resolved
-      }
+    guard definitions.count > 0 && definitions[0].definition.numberOfArguments > 0 else {
+      throw DipError.definitionNotFound(key: key)
     }
-    return nil
+    
+    let maximumNumberOfArguments = definitions.first?.definition.numberOfArguments
+    definitions = definitions.filter({ $0.definition.numberOfArguments == maximumNumberOfArguments })
+    definitions = order(definitions: definitions, byTag: key.tag)
+
+    //when there are several definitions with the same number of arguments but different arguments types
+    if definitions.count > 1 && definitions[0].key.typeOfArguments != definitions[1].key.typeOfArguments {
+      let error = DipError.ambiguousDefinitions(type: key.type, definitions: definitions.map({ $0.definition }))
+      throw DipError.autoWiringFailed(type: key.type, underlyingError: error)
+    } else {
+      return definitions[0]
+    }
   }
   
-  private func resolveKey(_ key: DefinitionKey, tag: DependencyContainer.Tag?, type: Any.Type) throws -> Any {
-    let key = key.tagged(tag ?? context.tag)
-    let resolved: Any = try resolveKey(key, builder: { definition in
-      try definition.autoWiringFactory!(self, tag)
-    })
-    return resolved
-  }
-  
-}
-
-typealias KeyDefinitionPair = (key: DefinitionKey, definition: _Definition)
-
-/// Definitions are matched if they are registered for the same tag and thier factories accept the same number of runtime arguments.
-private func ~=(lhs: KeyDefinitionPair, rhs: KeyDefinitionPair) -> Bool {
-  guard lhs.key.protocolType == rhs.key.protocolType else { return false }
-  guard lhs.key.associatedTag == rhs.key.associatedTag else { return false }
-  guard lhs.definition.numberOfArguments == rhs.definition.numberOfArguments else { return false }
-  return true
-}
-
-func filter(_ definitions: [KeyDefinitionPair], type: Any.Type, tag: DependencyContainer.Tag?, argumentsType: Any.Type? = nil) -> [KeyDefinitionPair] {
-  let definitions =  definitions
-    .filter({ $0.key.protocolType == type || $0.definition.doesImplements(type) })
-    .filter({ $0.key.associatedTag == tag || $0.key.associatedTag == nil })
-  
-  if let argumentsType = argumentsType {
-    return definitions.filter({ $0.key.argumentsType == argumentsType })
-  }
-  return definitions
-}
-
-func order(_ definitions: [KeyDefinitionPair], tag: DependencyContainer.Tag?) -> [KeyDefinitionPair] {
-  return
-    //first will try to use tagged definitions
-    definitions.filter({ $0.key.associatedTag == tag }) +
-    //then will use not tagged definitions
-    definitions.filter({ $0.key.associatedTag != tag })
 }

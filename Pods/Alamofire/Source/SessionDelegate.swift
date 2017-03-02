@@ -25,109 +25,149 @@
 import Foundation
 
 /// Responsible for handling all delegate callbacks for the underlying session.
-public class SessionDelegate: NSObject {
+open class SessionDelegate: NSObject {
 
     // MARK: URLSessionDelegate Overrides
 
-    /// Overrides default behavior for NSURLSessionDelegate method `URLSession:didBecomeInvalidWithError:`.
-    public var sessionDidBecomeInvalidWithError: ((URLSession, NSError?) -> Void)?
+    /// Overrides default behavior for URLSessionDelegate method `urlSession(_:didBecomeInvalidWithError:)`.
+    open var sessionDidBecomeInvalidWithError: ((URLSession, Error?) -> Void)?
 
-    /// Overrides default behavior for NSURLSessionDelegate method `URLSession:didReceiveChallenge:completionHandler:`.
-    public var sessionDidReceiveChallenge: ((URLSession, URLAuthenticationChallenge) -> (URLSession.AuthChallengeDisposition, URLCredential?))?
+    /// Overrides default behavior for URLSessionDelegate method `urlSession(_:didReceive:completionHandler:)`.
+    open var sessionDidReceiveChallenge: ((URLSession, URLAuthenticationChallenge) -> (URLSession.AuthChallengeDisposition, URLCredential?))?
 
-    /// Overrides all behavior for NSURLSessionDelegate method `URLSession:didReceiveChallenge:completionHandler:` and requires the caller to call the `completionHandler`.
-    public var sessionDidReceiveChallengeWithCompletion: ((URLSession, URLAuthenticationChallenge, (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) -> Void)?
+    /// Overrides all behavior for URLSessionDelegate method `urlSession(_:didReceive:completionHandler:)` and requires the caller to call the `completionHandler`.
+    open var sessionDidReceiveChallengeWithCompletion: ((URLSession, URLAuthenticationChallenge, (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) -> Void)?
 
-    /// Overrides default behavior for NSURLSessionDelegate method `URLSessionDidFinishEventsForBackgroundURLSession:`.
-    public var sessionDidFinishEventsForBackgroundURLSession: ((URLSession) -> Void)?
+    /// Overrides default behavior for URLSessionDelegate method `urlSessionDidFinishEvents(forBackgroundURLSession:)`.
+    open var sessionDidFinishEventsForBackgroundURLSession: ((URLSession) -> Void)?
 
     // MARK: URLSessionTaskDelegate Overrides
 
-    /// Overrides default behavior for NSURLSessionTaskDelegate method `URLSession:task:willPerformHTTPRedirection:newRequest:completionHandler:`.
-    public var taskWillPerformHTTPRedirection: ((URLSession, URLSessionTask, HTTPURLResponse, URLRequest) -> URLRequest?)?
+    /// Overrides default behavior for URLSessionTaskDelegate method `urlSession(_:task:willPerformHTTPRedirection:newRequest:completionHandler:)`.
+    open var taskWillPerformHTTPRedirection: ((URLSession, URLSessionTask, HTTPURLResponse, URLRequest) -> URLRequest?)?
 
-    /// Overrides all behavior for NSURLSessionTaskDelegate method `URLSession:task:willPerformHTTPRedirection:newRequest:completionHandler:` and
+    /// Overrides all behavior for URLSessionTaskDelegate method `urlSession(_:task:willPerformHTTPRedirection:newRequest:completionHandler:)` and
     /// requires the caller to call the `completionHandler`.
-    public var taskWillPerformHTTPRedirectionWithCompletion: ((URLSession, URLSessionTask, HTTPURLResponse, URLRequest, (URLRequest?) -> Void) -> Void)?
+    open var taskWillPerformHTTPRedirectionWithCompletion: ((URLSession, URLSessionTask, HTTPURLResponse, URLRequest, (URLRequest?) -> Void) -> Void)?
 
-    /// Overrides default behavior for NSURLSessionTaskDelegate method `URLSession:task:didReceiveChallenge:completionHandler:`.
-    public var taskDidReceiveChallenge: ((URLSession, URLSessionTask, URLAuthenticationChallenge) -> (URLSession.AuthChallengeDisposition, URLCredential?))?
+    /// Overrides default behavior for URLSessionTaskDelegate method `urlSession(_:task:didReceive:completionHandler:)`.
+    open var taskDidReceiveChallenge: ((URLSession, URLSessionTask, URLAuthenticationChallenge) -> (URLSession.AuthChallengeDisposition, URLCredential?))?
 
-    /// Overrides all behavior for NSURLSessionTaskDelegate method `URLSession:task:didReceiveChallenge:completionHandler:` and
+    /// Overrides all behavior for URLSessionTaskDelegate method `urlSession(_:task:didReceive:completionHandler:)` and
     /// requires the caller to call the `completionHandler`.
-    public var taskDidReceiveChallengeWithCompletion: ((URLSession, URLSessionTask, URLAuthenticationChallenge, (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) -> Void)?
+    open var taskDidReceiveChallengeWithCompletion: ((URLSession, URLSessionTask, URLAuthenticationChallenge, (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) -> Void)?
 
-    /// Overrides default behavior for NSURLSessionTaskDelegate method `URLSession:session:task:needNewBodyStream:`.
-    public var taskNeedNewBodyStream: ((URLSession, URLSessionTask) -> InputStream?)?
+    /// Overrides default behavior for URLSessionTaskDelegate method `urlSession(_:task:needNewBodyStream:)`.
+    open var taskNeedNewBodyStream: ((URLSession, URLSessionTask) -> InputStream?)?
 
-    /// Overrides all behavior for NSURLSessionTaskDelegate method `URLSession:session:task:needNewBodyStream:` and
+    /// Overrides all behavior for URLSessionTaskDelegate method `urlSession(_:task:needNewBodyStream:)` and
     /// requires the caller to call the `completionHandler`.
-    public var taskNeedNewBodyStreamWithCompletion: ((URLSession, URLSessionTask, (InputStream?) -> Void) -> Void)?
+    open var taskNeedNewBodyStreamWithCompletion: ((URLSession, URLSessionTask, (InputStream?) -> Void) -> Void)?
 
-    /// Overrides default behavior for NSURLSessionTaskDelegate method `URLSession:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend:`.
-    public var taskDidSendBodyData: ((URLSession, URLSessionTask, Int64, Int64, Int64) -> Void)?
+    /// Overrides default behavior for URLSessionTaskDelegate method `urlSession(_:task:didSendBodyData:totalBytesSent:totalBytesExpectedToSend:)`.
+    open var taskDidSendBodyData: ((URLSession, URLSessionTask, Int64, Int64, Int64) -> Void)?
 
-    /// Overrides default behavior for NSURLSessionTaskDelegate method `URLSession:task:didCompleteWithError:`.
-    public var taskDidComplete: ((URLSession, URLSessionTask, NSError?) -> Void)?
+    /// Overrides default behavior for URLSessionTaskDelegate method `urlSession(_:task:didCompleteWithError:)`.
+    open var taskDidComplete: ((URLSession, URLSessionTask, Error?) -> Void)?
 
     // MARK: URLSessionDataDelegate Overrides
 
-    /// Overrides default behavior for NSURLSessionDataDelegate method `URLSession:dataTask:didReceiveResponse:completionHandler:`.
-    public var dataTaskDidReceiveResponse: ((URLSession, URLSessionDataTask, URLResponse) -> URLSession.ResponseDisposition)?
+    /// Overrides default behavior for URLSessionDataDelegate method `urlSession(_:dataTask:didReceive:completionHandler:)`.
+    open var dataTaskDidReceiveResponse: ((URLSession, URLSessionDataTask, URLResponse) -> URLSession.ResponseDisposition)?
 
-    /// Overrides all behavior for NSURLSessionDataDelegate method `URLSession:dataTask:didReceiveResponse:completionHandler:` and
+    /// Overrides all behavior for URLSessionDataDelegate method `urlSession(_:dataTask:didReceive:completionHandler:)` and
     /// requires caller to call the `completionHandler`.
-    public var dataTaskDidReceiveResponseWithCompletion: ((URLSession, URLSessionDataTask, URLResponse, (URLSession.ResponseDisposition) -> Void) -> Void)?
+    open var dataTaskDidReceiveResponseWithCompletion: ((URLSession, URLSessionDataTask, URLResponse, (URLSession.ResponseDisposition) -> Void) -> Void)?
 
-    /// Overrides default behavior for NSURLSessionDataDelegate method `URLSession:dataTask:didBecomeDownloadTask:`.
-    public var dataTaskDidBecomeDownloadTask: ((URLSession, URLSessionDataTask, URLSessionDownloadTask) -> Void)?
+    /// Overrides default behavior for URLSessionDataDelegate method `urlSession(_:dataTask:didBecome:)`.
+    open var dataTaskDidBecomeDownloadTask: ((URLSession, URLSessionDataTask, URLSessionDownloadTask) -> Void)?
 
-    /// Overrides default behavior for NSURLSessionDataDelegate method `URLSession:dataTask:didReceiveData:`.
-    public var dataTaskDidReceiveData: ((URLSession, URLSessionDataTask, Data) -> Void)?
+    /// Overrides default behavior for URLSessionDataDelegate method `urlSession(_:dataTask:didReceive:)`.
+    open var dataTaskDidReceiveData: ((URLSession, URLSessionDataTask, Data) -> Void)?
 
-    /// Overrides default behavior for NSURLSessionDataDelegate method `URLSession:dataTask:willCacheResponse:completionHandler:`.
-    public var dataTaskWillCacheResponse: ((URLSession, URLSessionDataTask, CachedURLResponse) -> CachedURLResponse?)?
+    /// Overrides default behavior for URLSessionDataDelegate method `urlSession(_:dataTask:willCacheResponse:completionHandler:)`.
+    open var dataTaskWillCacheResponse: ((URLSession, URLSessionDataTask, CachedURLResponse) -> CachedURLResponse?)?
 
-    /// Overrides all behavior for NSURLSessionDataDelegate method `URLSession:dataTask:willCacheResponse:completionHandler:` and
+    /// Overrides all behavior for URLSessionDataDelegate method `urlSession(_:dataTask:willCacheResponse:completionHandler:)` and
     /// requires caller to call the `completionHandler`.
-    public var dataTaskWillCacheResponseWithCompletion: ((URLSession, URLSessionDataTask, CachedURLResponse, (CachedURLResponse?) -> Void) -> Void)?
+    open var dataTaskWillCacheResponseWithCompletion: ((URLSession, URLSessionDataTask, CachedURLResponse, (CachedURLResponse?) -> Void) -> Void)?
 
-    // MARK: NSURLSessionDownloadDelegate Overrides
+    // MARK: URLSessionDownloadDelegate Overrides
 
-    /// Overrides default behavior for NSURLSessionDownloadDelegate method `URLSession:downloadTask:didFinishDownloadingToURL:`.
-    public var downloadTaskDidFinishDownloadingToURL: ((URLSession, URLSessionDownloadTask, URL) -> Void)?
+    /// Overrides default behavior for URLSessionDownloadDelegate method `urlSession(_:downloadTask:didFinishDownloadingTo:)`.
+    open var downloadTaskDidFinishDownloadingToURL: ((URLSession, URLSessionDownloadTask, URL) -> Void)?
 
-    /// Overrides default behavior for NSURLSessionDownloadDelegate method `URLSession:downloadTask:didWriteData:totalBytesWritten:totalBytesExpectedToWrite:`.
-    public var downloadTaskDidWriteData: ((URLSession, URLSessionDownloadTask, Int64, Int64, Int64) -> Void)?
+    /// Overrides default behavior for URLSessionDownloadDelegate method `urlSession(_:downloadTask:didWriteData:totalBytesWritten:totalBytesExpectedToWrite:)`.
+    open var downloadTaskDidWriteData: ((URLSession, URLSessionDownloadTask, Int64, Int64, Int64) -> Void)?
 
-    /// Overrides default behavior for NSURLSessionDownloadDelegate method `URLSession:downloadTask:didResumeAtOffset:expectedTotalBytes:`.
-    public var downloadTaskDidResumeAtOffset: ((URLSession, URLSessionDownloadTask, Int64, Int64) -> Void)?
+    /// Overrides default behavior for URLSessionDownloadDelegate method `urlSession(_:downloadTask:didResumeAtOffset:expectedTotalBytes:)`.
+    open var downloadTaskDidResumeAtOffset: ((URLSession, URLSessionDownloadTask, Int64, Int64) -> Void)?
 
     // MARK: URLSessionStreamDelegate Overrides
 
 #if !os(watchOS)
 
-    /// Overrides default behavior for NSURLSessionStreamDelegate method `URLSession:readClosedForStreamTask:`.
-    public var streamTaskReadClosed: ((URLSession, URLSessionStreamTask) -> Void)?
+    /// Overrides default behavior for URLSessionStreamDelegate method `urlSession(_:readClosedFor:)`.
+    @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+    open var streamTaskReadClosed: ((URLSession, URLSessionStreamTask) -> Void)? {
+        get {
+            return _streamTaskReadClosed as? (URLSession, URLSessionStreamTask) -> Void
+        }
+        set {
+            _streamTaskReadClosed = newValue
+        }
+    }
 
-    /// Overrides default behavior for NSURLSessionStreamDelegate method `URLSession:writeClosedForStreamTask:`.
-    public var streamTaskWriteClosed: ((URLSession, URLSessionStreamTask) -> Void)?
+    /// Overrides default behavior for URLSessionStreamDelegate method `urlSession(_:writeClosedFor:)`.
+    @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+    open var streamTaskWriteClosed: ((URLSession, URLSessionStreamTask) -> Void)? {
+        get {
+            return _streamTaskWriteClosed as? (URLSession, URLSessionStreamTask) -> Void
+        }
+        set {
+            _streamTaskWriteClosed = newValue
+        }
+    }
 
-    /// Overrides default behavior for NSURLSessionStreamDelegate method `URLSession:betterRouteDiscoveredForStreamTask:`.
-    public var streamTaskBetterRouteDiscovered: ((URLSession, URLSessionStreamTask) -> Void)?
+    /// Overrides default behavior for URLSessionStreamDelegate method `urlSession(_:betterRouteDiscoveredFor:)`.
+    @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+    open var streamTaskBetterRouteDiscovered: ((URLSession, URLSessionStreamTask) -> Void)? {
+        get {
+            return _streamTaskBetterRouteDiscovered as? (URLSession, URLSessionStreamTask) -> Void
+        }
+        set {
+            _streamTaskBetterRouteDiscovered = newValue
+        }
+    }
 
-    /// Overrides default behavior for NSURLSessionStreamDelegate method `URLSession:streamTask:didBecomeInputStream:outputStream:`.
-    public var streamTaskDidBecomeInputStream: ((URLSession, URLSessionStreamTask, InputStream, NSOutputStream) -> Void)?
+    /// Overrides default behavior for URLSessionStreamDelegate method `urlSession(_:streamTask:didBecome:outputStream:)`.
+    @available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
+    open var streamTaskDidBecomeInputAndOutputStreams: ((URLSession, URLSessionStreamTask, InputStream, OutputStream) -> Void)? {
+        get {
+            return _streamTaskDidBecomeInputStream as? (URLSession, URLSessionStreamTask, InputStream, OutputStream) -> Void
+        }
+        set {
+            _streamTaskDidBecomeInputStream = newValue
+        }
+    }
+
+    var _streamTaskReadClosed: Any?
+    var _streamTaskWriteClosed: Any?
+    var _streamTaskBetterRouteDiscovered: Any?
+    var _streamTaskDidBecomeInputStream: Any?
 
 #endif
 
     // MARK: Properties
 
+    var retrier: RequestRetrier?
+    weak var sessionManager: SessionManager?
+
     private var requests: [Int: Request] = [:]
     private let lock = NSLock()
 
     /// Access the task delegate for the specified task in a thread-safe manner.
-    public subscript(task: URLSessionTask) -> Request? {
+    open subscript(task: URLSessionTask) -> Request? {
         get {
             lock.lock() ; defer { lock.unlock() }
             return requests[task.taskIdentifier]
@@ -155,10 +195,27 @@ public class SessionDelegate: NSObject {
     /// - parameter selector: A selector that identifies a message.
     ///
     /// - returns: `true` if the receiver implements or inherits a method that can respond to selector, otherwise `false`.
-    public override func responds(to selector: Selector) -> Bool {
-        #if !os(OSX)
+    open override func responds(to selector: Selector) -> Bool {
+        #if !os(macOS)
             if selector == #selector(URLSessionDelegate.urlSessionDidFinishEvents(forBackgroundURLSession:)) {
                 return sessionDidFinishEventsForBackgroundURLSession != nil
+            }
+        #endif
+
+        #if !os(watchOS)
+            if #available(iOS 9.0, macOS 10.11, tvOS 9.0, *) {
+                switch selector {
+                case #selector(URLSessionStreamDelegate.urlSession(_:readClosedFor:)):
+                    return streamTaskReadClosed != nil
+                case #selector(URLSessionStreamDelegate.urlSession(_:writeClosedFor:)):
+                    return streamTaskWriteClosed != nil
+                case #selector(URLSessionStreamDelegate.urlSession(_:betterRouteDiscoveredFor:)):
+                    return streamTaskBetterRouteDiscovered != nil
+                case #selector(URLSessionStreamDelegate.urlSession(_:streamTask:didBecome:outputStream:)):
+                    return streamTaskDidBecomeInputAndOutputStreams != nil
+                default:
+                    break
+                }
             }
         #endif
 
@@ -172,7 +229,7 @@ public class SessionDelegate: NSObject {
         case #selector(URLSessionDataDelegate.urlSession(_:dataTask:didReceive:completionHandler:)):
             return (dataTaskDidReceiveResponse != nil || dataTaskDidReceiveResponseWithCompletion != nil)
         default:
-            return self.dynamicType.instancesRespond(to: selector)
+            return type(of: self).instancesRespond(to: selector)
         }
     }
 }
@@ -184,7 +241,7 @@ extension SessionDelegate: URLSessionDelegate {
     ///
     /// - parameter session: The session object that was invalidated.
     /// - parameter error:   The error that caused invalidation, or nil if the invalidation was explicit.
-    public func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
+    open func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
         sessionDidBecomeInvalidWithError?(session, error)
     }
 
@@ -195,10 +252,10 @@ extension SessionDelegate: URLSessionDelegate {
     /// - parameter challenge:         An object that contains the request for authentication.
     /// - parameter completionHandler: A handler that your delegate method must call providing the disposition
     ///                                and credential.
-    public func urlSession(
+    open func urlSession(
         _ session: URLSession,
         didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: ((URLSession.AuthChallengeDisposition, URLCredential?) -> Void))
+        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void)
     {
         guard sessionDidReceiveChallengeWithCompletion == nil else {
             sessionDidReceiveChallengeWithCompletion?(session, challenge, completionHandler)
@@ -229,12 +286,12 @@ extension SessionDelegate: URLSessionDelegate {
         completionHandler(disposition, credential)
     }
 
-#if !os(OSX)
+#if !os(macOS)
 
     /// Tells the delegate that all messages enqueued for a session have been delivered.
     ///
     /// - parameter session: The session that no longer has any outstanding requests.
-    public func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
+    open func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
         sessionDidFinishEventsForBackgroundURLSession?(session)
     }
 
@@ -253,12 +310,12 @@ extension SessionDelegate: URLSessionTaskDelegate {
     /// - parameter completionHandler: A closure that your handler should call with either the value of the request
     ///                                parameter, a modified URL request object, or NULL to refuse the redirect and
     ///                                return the body of the redirect response.
-    public func urlSession(
+    open func urlSession(
         _ session: URLSession,
         task: URLSessionTask,
         willPerformHTTPRedirection response: HTTPURLResponse,
         newRequest request: URLRequest,
-        completionHandler: (URLRequest?) -> Void)
+        completionHandler: @escaping (URLRequest?) -> Void)
     {
         guard taskWillPerformHTTPRedirectionWithCompletion == nil else {
             taskWillPerformHTTPRedirectionWithCompletion?(session, task, response, request, completionHandler)
@@ -281,11 +338,11 @@ extension SessionDelegate: URLSessionTaskDelegate {
     /// - parameter challenge:         An object that contains the request for authentication.
     /// - parameter completionHandler: A handler that your delegate method must call providing the disposition
     ///                                and credential.
-    public func urlSession(
+    open func urlSession(
         _ session: URLSession,
         task: URLSessionTask,
         didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: (URLSession.AuthChallengeDisposition, URLCredential?) -> Void)
+        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void)
     {
         guard taskDidReceiveChallengeWithCompletion == nil else {
             taskDidReceiveChallengeWithCompletion?(session, task, challenge, completionHandler)
@@ -312,10 +369,10 @@ extension SessionDelegate: URLSessionTaskDelegate {
     /// - parameter session:           The session containing the task that needs a new body stream.
     /// - parameter task:              The task that needs a new body stream.
     /// - parameter completionHandler: A completion handler that your delegate method should call with the new body stream.
-    public func urlSession(
+    open func urlSession(
         _ session: URLSession,
         task: URLSessionTask,
-        needNewBodyStream completionHandler: (InputStream?) -> Void)
+        needNewBodyStream completionHandler: @escaping (InputStream?) -> Void)
     {
         guard taskNeedNewBodyStreamWithCompletion == nil else {
             taskNeedNewBodyStreamWithCompletion?(session, task, completionHandler)
@@ -336,7 +393,7 @@ extension SessionDelegate: URLSessionTaskDelegate {
     /// - parameter bytesSent:                The number of bytes sent since the last time this delegate method was called.
     /// - parameter totalBytesSent:           The total number of bytes sent so far.
     /// - parameter totalBytesExpectedToSend: The expected length of the body data.
-    public func urlSession(
+    open func urlSession(
         _ session: URLSession,
         task: URLSessionTask,
         didSendBodyData bytesSent: Int64,
@@ -356,25 +413,81 @@ extension SessionDelegate: URLSessionTaskDelegate {
         }
     }
 
+#if !os(watchOS)
+
+    /// Tells the delegate that the session finished collecting metrics for the task.
+    ///
+    /// - parameter session: The session collecting the metrics.
+    /// - parameter task:    The task whose metrics have been collected.
+    /// - parameter metrics: The collected metrics.
+    @available(iOS 10.0, macOS 10.12, tvOS 10.0, *)
+    @objc(URLSession:task:didFinishCollectingMetrics:)
+    open func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
+        self[task]?.delegate.metrics = metrics
+    }
+
+#endif
+
     /// Tells the delegate that the task finished transferring data.
     ///
     /// - parameter session: The session containing the task whose request finished transferring data.
     /// - parameter task:    The task whose request finished transferring data.
     /// - parameter error:   If an error occurred, an error object indicating how the transfer failed, otherwise nil.
-    public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        if let taskDidComplete = taskDidComplete {
-            taskDidComplete(session, task, error)
-        } else if let delegate = self[task]?.delegate {
-            delegate.urlSession(session, task: task, didCompleteWithError: error)
+    open func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        /// Executed after it is determined that the request is not going to be retried
+        let completeTask: (URLSession, URLSessionTask, Error?) -> Void = { [weak self] session, task, error in
+            guard let strongSelf = self else { return }
+
+            strongSelf.taskDidComplete?(session, task, error)
+
+            strongSelf[task]?.delegate.urlSession(session, task: task, didCompleteWithError: error)
+
+            NotificationCenter.default.post(
+                name: Notification.Name.Task.DidComplete,
+                object: strongSelf,
+                userInfo: [Notification.Key.Task: task]
+            )
+
+            strongSelf[task] = nil
         }
 
-        NotificationCenter.default.post(
-            name: Notification.Name.Task.DidComplete,
-            object: self,
-            userInfo: [Notification.Key.Task: task]
-        )
+        guard let request = self[task], let sessionManager = sessionManager else {
+            completeTask(session, task, error)
+            return
+        }
 
-        self[task] = nil
+        // Run all validations on the request before checking if an error occurred
+        request.validations.forEach { $0() }
+
+        // Determine whether an error has occurred
+        var error: Error? = error
+
+        if let taskDelegate = self[task]?.delegate, taskDelegate.error != nil {
+            error = taskDelegate.error
+        }
+
+        /// If an error occurred and the retrier is set, asynchronously ask the retrier if the request
+        /// should be retried. Otherwise, complete the task by notifying the task delegate.
+        if let retrier = retrier, let error = error {
+            retrier.should(sessionManager, retry: request, with: error) { [weak self] shouldRetry, timeDelay in
+                guard shouldRetry else { completeTask(session, task, error) ; return }
+
+                DispatchQueue.utility.after(timeDelay) { [weak self] in
+                    guard let strongSelf = self else { return }
+
+                    let retrySucceeded = strongSelf.sessionManager?.retry(request) ?? false
+
+                    if retrySucceeded, let task = request.task {
+                        strongSelf[task] = request
+                        return
+                    } else {
+                        completeTask(session, task, error)
+                    }
+                }
+            }
+        } else {
+            completeTask(session, task, error)
+        }
     }
 }
 
@@ -389,11 +502,11 @@ extension SessionDelegate: URLSessionDataDelegate {
     /// - parameter completionHandler: A completion handler that your code calls to continue the transfer, passing a
     ///                                constant to indicate whether the transfer should continue as a data task or
     ///                                should become a download task.
-    public func urlSession(
+    open func urlSession(
         _ session: URLSession,
         dataTask: URLSessionDataTask,
         didReceive response: URLResponse,
-        completionHandler: (URLSession.ResponseDisposition) -> Void)
+        completionHandler: @escaping (URLSession.ResponseDisposition) -> Void)
     {
         guard dataTaskDidReceiveResponseWithCompletion == nil else {
             dataTaskDidReceiveResponseWithCompletion?(session, dataTask, response, completionHandler)
@@ -414,7 +527,7 @@ extension SessionDelegate: URLSessionDataDelegate {
     /// - parameter session:      The session containing the task that was replaced by a download task.
     /// - parameter dataTask:     The data task that was replaced by a download task.
     /// - parameter downloadTask: The new download task that replaced the data task.
-    public func urlSession(
+    open func urlSession(
         _ session: URLSession,
         dataTask: URLSessionDataTask,
         didBecome downloadTask: URLSessionDownloadTask)
@@ -431,7 +544,7 @@ extension SessionDelegate: URLSessionDataDelegate {
     /// - parameter session:  The session containing the data task that provided data.
     /// - parameter dataTask: The data task that provided data.
     /// - parameter data:     A data object containing the transferred data.
-    public func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+    open func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         if let dataTaskDidReceiveData = dataTaskDidReceiveData {
             dataTaskDidReceiveData(session, dataTask, data)
         } else if let delegate = self[dataTask]?.delegate as? DataTaskDelegate {
@@ -450,11 +563,11 @@ extension SessionDelegate: URLSessionDataDelegate {
     ///                                response, a modified version of that response, or NULL to prevent caching the
     ///                                response. If your delegate implements this method, it must call this completion
     ///                                handler; otherwise, your app leaks memory.
-    public func urlSession(
+    open func urlSession(
         _ session: URLSession,
         dataTask: URLSessionDataTask,
         willCacheResponse proposedResponse: CachedURLResponse,
-        completionHandler: (CachedURLResponse?) -> Void)
+        completionHandler: @escaping (CachedURLResponse?) -> Void)
     {
         guard dataTaskWillCacheResponseWithCompletion == nil else {
             dataTaskWillCacheResponseWithCompletion?(session, dataTask, proposedResponse, completionHandler)
@@ -486,7 +599,7 @@ extension SessionDelegate: URLSessionDownloadDelegate {
     /// - parameter location:     A file URL for the temporary file. Because the file is temporary, you must either
     ///                           open the file for reading or move it to a permanent location in your app’s sandbox
     ///                           container directory before returning from this delegate method.
-    public func urlSession(
+    open func urlSession(
         _ session: URLSession,
         downloadTask: URLSessionDownloadTask,
         didFinishDownloadingTo location: URL)
@@ -508,7 +621,7 @@ extension SessionDelegate: URLSessionDownloadDelegate {
     /// - parameter totalBytesExpectedToWrite: The expected length of the file, as provided by the Content-Length
     ///                                        header. If this header was not provided, the value is
     ///                                        `NSURLSessionTransferSizeUnknown`.
-    public func urlSession(
+    open func urlSession(
         _ session: URLSession,
         downloadTask: URLSessionDownloadTask,
         didWriteData bytesWritten: Int64,
@@ -538,7 +651,7 @@ extension SessionDelegate: URLSessionDownloadDelegate {
     ///                                 retrieved again.
     /// - parameter expectedTotalBytes: The expected length of the file, as provided by the Content-Length header.
     ///                                 If this header was not provided, the value is NSURLSessionTransferSizeUnknown.
-    public func urlSession(
+    open func urlSession(
         _ session: URLSession,
         downloadTask: URLSessionDownloadTask,
         didResumeAtOffset fileOffset: Int64,
@@ -561,12 +674,13 @@ extension SessionDelegate: URLSessionDownloadDelegate {
 
 #if !os(watchOS)
 
+@available(iOS 9.0, macOS 10.11, tvOS 9.0, *)
 extension SessionDelegate: URLSessionStreamDelegate {
     /// Tells the delegate that the read side of the connection has been closed.
     ///
     /// - parameter session:    The session.
     /// - parameter streamTask: The stream task.
-    public func urlSession(_ session: URLSession, readClosedFor streamTask: URLSessionStreamTask) {
+    open func urlSession(_ session: URLSession, readClosedFor streamTask: URLSessionStreamTask) {
         streamTaskReadClosed?(session, streamTask)
     }
 
@@ -574,7 +688,7 @@ extension SessionDelegate: URLSessionStreamDelegate {
     ///
     /// - parameter session:    The session.
     /// - parameter streamTask: The stream task.
-    public func urlSession(_ session: URLSession, writeClosedFor streamTask: URLSessionStreamTask) {
+    open func urlSession(_ session: URLSession, writeClosedFor streamTask: URLSessionStreamTask) {
         streamTaskWriteClosed?(session, streamTask)
     }
 
@@ -582,7 +696,7 @@ extension SessionDelegate: URLSessionStreamDelegate {
     ///
     /// - parameter session:    The session.
     /// - parameter streamTask: The stream task.
-    public func urlSession(_ session: URLSession, betterRouteDiscoveredFor streamTask: URLSessionStreamTask) {
+    open func urlSession(_ session: URLSession, betterRouteDiscoveredFor streamTask: URLSessionStreamTask) {
         streamTaskBetterRouteDiscovered?(session, streamTask)
     }
 
@@ -592,13 +706,13 @@ extension SessionDelegate: URLSessionStreamDelegate {
     /// - parameter streamTask:   The stream task.
     /// - parameter inputStream:  The new input stream.
     /// - parameter outputStream: The new output stream.
-    public func urlSession(
+    open func urlSession(
         _ session: URLSession,
         streamTask: URLSessionStreamTask,
         didBecome inputStream: InputStream,
-        outputStream: NSOutputStream)
+        outputStream: OutputStream)
     {
-        streamTaskDidBecomeInputStream?(session, streamTask, inputStream, outputStream)
+        streamTaskDidBecomeInputAndOutputStreams?(session, streamTask, inputStream, outputStream)
     }
 }
 

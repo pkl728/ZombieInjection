@@ -27,7 +27,8 @@ struct AlamofireImageService: ImageDownloadService {
         }
         
         if let imageUrl = item.imageUrl {
-            self.imageDownloader.downloadImage(urlRequest: URLRequest(url: imageUrl)) { response in
+            let urlRequest = URLRequest(url: imageUrl)
+            self.imageDownloader.download(urlRequest) { response in
                 if response.result.isFailure {
                     print("Problem downloading")
                 }

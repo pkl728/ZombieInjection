@@ -14,15 +14,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private let container = DependencyContainer.configure()
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]? = [:]) -> Bool {
-        
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         let zombieService = try! container.resolve() as ZombieServiceProtocol
         let imageDownloadService = try! container.resolve() as ImageDownloadService
         
         if let navViewController = self.window?.rootViewController as? UINavigationController {
-                if let zombieListViewController = navViewController.topViewController as? ZombieListViewController {
-                    zombieListViewController.viewModel.zombieService = zombieService
-                    zombieListViewController.viewModel.imageDownloadService = imageDownloadService
+            if let zombieListViewController = navViewController.topViewController as? ZombieListViewController {
+                zombieListViewController.viewModel.zombieService = zombieService
+                zombieListViewController.viewModel.imageDownloadService = imageDownloadService
             }
         }
         return true

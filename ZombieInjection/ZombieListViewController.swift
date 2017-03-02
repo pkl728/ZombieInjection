@@ -15,7 +15,7 @@ class ZombieListViewController: UIViewController, UITableViewDelegate {
     
     let viewModel = ZombieListViewModel()
     
-    private var dataSource = ObservableArray<ObservableArray<Zombie>>()
+    private var dataSource = ObservableArray<Zombie>()
     
     @IBOutlet weak var zombieTableView: UITableView!
 
@@ -24,7 +24,7 @@ class ZombieListViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.updateZombieList()
-        self.dataSource = viewModel.tableMembers.lift()
+        self.dataSource = viewModel.tableMembers
         
         createBindings()
         
@@ -33,7 +33,7 @@ class ZombieListViewController: UIViewController, UITableViewDelegate {
     
     // MARK: Navigation
     
-    override func prepare(for segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if (segue.identifier == "ShowZombieDetails") {
             let indexPath = self.zombieTableView.indexPathForSelectedRow
@@ -48,16 +48,15 @@ class ZombieListViewController: UIViewController, UITableViewDelegate {
     // MARK: Binding
     
     func createBindings() {
-        dataSource.bindTo(self.zombieTableView) {
-            indexPath, dataSource, tableView in
+        dataSource.bind(to: self.zombieTableView) {
+            dataSource, indexPath, tableView in
             
             let cell = tableView.dequeueReusableCell(withIdentifier: ZombieCell.cellIdentifier, for: indexPath) as! ZombieCell
-            let zombie = dataSource[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row]
+            let zombie = dataSource[(indexPath as NSIndexPath).row]
             self.viewModel.imageDownloadService.requestImage(forItem: zombie)
-            zombie.name.bindTo(cell.zombieNameLabel.bnd_text).disposeIn(cell.bnd_bag)
-            zombie.image.bindTo(cell.zombieImageView.bnd_image).disposeIn(cell.bnd_bag)
+            zombie.name.bind(to: cell.zombieNameLabel.reactive.text).dispose(in: cell.reactive.bag)
+            zombie.image.bind(to: cell.zombieImageView.reactive.image).dispose(in: cell.reactive.bag)
             return cell
-        }.disposeIn(bnd_bag)
+        }.dispose(in: reactive.bag)
     }
 }
-

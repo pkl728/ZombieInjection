@@ -6,18 +6,10 @@ target 'ZombieInjection' do
   use_frameworks!
 
   # Pods for ZombieInjection
-  pod 'Alamofire',
-  :git => 'https://github.com/Alamofire/Alamofire.git',
-  :branch => 'swift3'
-  pod 'AlamofireImage', 
-  :git => 'https://github.com/pkl728/AlamofireImage.git',
-  :branch => 'swift3'
-  pod 'Bond', 
-  :git => 'https://github.com/pkl728/Bond.git',
-  :branch => 'swift3'
-  pod 'Dip', 
-  :git => 'https://github.com/AliSoftware/Dip.git',
-  :branch => 'feature/swift3'
+  pod 'Alamofire', '~> 4.4'
+  pod 'AlamofireImage', '~> 3.2' 
+  pod 'Bond', '~> 6.0' 
+  pod 'Dip', '~> 5.0' 
 
   target 'ZombieInjectionTests' do
     inherit! :search_paths

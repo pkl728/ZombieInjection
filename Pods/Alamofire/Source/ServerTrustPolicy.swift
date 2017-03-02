@@ -25,9 +25,9 @@
 import Foundation
 
 /// Responsible for managing the mapping of `ServerTrustPolicy` objects to a given host.
-public class ServerTrustPolicyManager {
+open class ServerTrustPolicyManager {
     /// The dictionary of policies mapped to a particular host.
-    public let policies: [String: ServerTrustPolicy]
+    open let policies: [String: ServerTrustPolicy]
 
     /// Initializes the `ServerTrustPolicyManager` instance with the given policies.
     ///
@@ -51,7 +51,7 @@ public class ServerTrustPolicyManager {
     /// - parameter host: The host to use when searching for a matching policy.
     ///
     /// - returns: The server trust policy for the given host if found.
-    public func serverTrustPolicy(forHost host: String) -> ServerTrustPolicy? {
+    open func serverTrustPolicy(forHost host: String) -> ServerTrustPolicy? {
         return policies[host]
     }
 }
@@ -60,15 +60,15 @@ public class ServerTrustPolicyManager {
 
 extension URLSession {
     private struct AssociatedKeys {
-        static var ManagerKey = "NSURLSession.ServerTrustPolicyManager"
+        static var managerKey = "URLSession.ServerTrustPolicyManager"
     }
 
     var serverTrustPolicyManager: ServerTrustPolicyManager? {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKeys.ManagerKey) as? ServerTrustPolicyManager
+            return objc_getAssociatedObject(self, &AssociatedKeys.managerKey) as? ServerTrustPolicyManager
         }
         set (manager) {
-            objc_setAssociatedObject(self, &AssociatedKeys.ManagerKey, manager, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &AssociatedKeys.managerKey, manager, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 }
@@ -87,6 +87,13 @@ extension URLSession {
 ///                             validate the host provided by the challenge. Applications are encouraged to always
 ///                             validate the host in production environments to guarantee the validity of the server's
 ///                             certificate chain.
+///
+/// - performRevokedEvaluation: Uses the default and revoked server trust evaluations allowing you to control whether to
+///                             validate the host provided by the challenge as well as specify the revocation flags for
+///                             testing for revoked certificates. Apple platforms did not start testing for revoked
+///                             certificates automatically until iOS 10.1, macOS 10.12 and tvOS 10.1 which is
+///                             demonstrated in our TLS tests. Applications are encouraged to always validate the host
+///                             in production environments to guarantee the validity of the server's certificate chain.
 ///
 /// - pinCertificates:          Uses the pinned certificates to validate the server trust. The server trust is
 ///                             considered valid if one of the pinned certificates match one of the server certificates.
@@ -107,10 +114,11 @@ extension URLSession {
 /// - customEvaluation:         Uses the associated closure to evaluate the validity of the server trust.
 public enum ServerTrustPolicy {
     case performDefaultEvaluation(validateHost: Bool)
+    case performRevokedEvaluation(validateHost: Bool, revocationFlags: CFOptionFlags)
     case pinCertificates(certificates: [SecCertificate], validateCertificateChain: Bool, validateHost: Bool)
     case pinPublicKeys(publicKeys: [SecKey], validateCertificateChain: Bool, validateHost: Bool)
     case disableEvaluation
-    case customEvaluation((serverTrust: SecTrust, host: String) -> Bool)
+    case customEvaluation((_ serverTrust: SecTrust, _ host: String) -> Bool)
 
     // MARK: - Bundle Location
 
@@ -124,11 +132,11 @@ public enum ServerTrustPolicy {
 
         let paths = Set([".cer", ".CER", ".crt", ".CRT", ".der", ".DER"].map { fileExtension in
             bundle.paths(forResourcesOfType: fileExtension, inDirectory: nil)
-        }.flatten())
+        }.joined())
 
         for path in paths {
             if
-                let certificateData = try? Data(contentsOf: URL(fileURLWithPath: path)),
+                let certificateData = try? Data(contentsOf: URL(fileURLWithPath: path)) as CFData,
                 let certificate = SecCertificateCreateWithData(nil, certificateData)
             {
                 certificates.append(certificate)
@@ -169,15 +177,21 @@ public enum ServerTrustPolicy {
         switch self {
         case let .performDefaultEvaluation(validateHost):
             let policy = SecPolicyCreateSSL(true, validateHost ? host as CFString : nil)
-            SecTrustSetPolicies(serverTrust, [policy])
+            SecTrustSetPolicies(serverTrust, policy)
+
+            serverTrustIsValid = trustIsValid(serverTrust)
+        case let .performRevokedEvaluation(validateHost, revocationFlags):
+            let defaultPolicy = SecPolicyCreateSSL(true, validateHost ? host as CFString : nil)
+            let revokedPolicy = SecPolicyCreateRevocation(revocationFlags)
+            SecTrustSetPolicies(serverTrust, [defaultPolicy, revokedPolicy] as CFTypeRef)
 
             serverTrustIsValid = trustIsValid(serverTrust)
         case let .pinCertificates(pinnedCertificates, validateCertificateChain, validateHost):
             if validateCertificateChain {
                 let policy = SecPolicyCreateSSL(true, validateHost ? host as CFString : nil)
-                SecTrustSetPolicies(serverTrust, [policy])
+                SecTrustSetPolicies(serverTrust, policy)
 
-                SecTrustSetAnchorCertificates(serverTrust, pinnedCertificates)
+                SecTrustSetAnchorCertificates(serverTrust, pinnedCertificates as CFArray)
                 SecTrustSetAnchorCertificatesOnly(serverTrust, true)
 
                 serverTrustIsValid = trustIsValid(serverTrust)
@@ -199,7 +213,7 @@ public enum ServerTrustPolicy {
 
             if validateCertificateChain {
                 let policy = SecPolicyCreateSSL(true, validateHost ? host as CFString : nil)
-                SecTrustSetPolicies(serverTrust, [policy])
+                SecTrustSetPolicies(serverTrust, policy)
 
                 certificateChainEvaluationPassed = trustIsValid(serverTrust)
             }
@@ -217,7 +231,7 @@ public enum ServerTrustPolicy {
         case .disableEvaluation:
             serverTrustIsValid = true
         case let .customEvaluation(closure):
-            serverTrustIsValid = closure(serverTrust: serverTrust, host: host)
+            serverTrustIsValid = closure(serverTrust, host)
         }
 
         return serverTrustIsValid
@@ -234,6 +248,7 @@ public enum ServerTrustPolicy {
         if status == errSecSuccess {
             let unspecified = SecTrustResultType.unspecified
             let proceed = SecTrustResultType.proceed
+
 
             isValid = result == unspecified || result == proceed
         }

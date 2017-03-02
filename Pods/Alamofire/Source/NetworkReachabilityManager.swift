@@ -34,16 +34,6 @@ import SystemConfiguration
 /// network requests when a connection is established. It should not be used to prevent a user from initiating a network
 /// request, as it's possible that an initial request may be required to establish reachability.
 public class NetworkReachabilityManager {
-    /**
-        Defines the various states of network reachability.
-
-        - Unknown:         It is unknown whether the network is reachable.
-        - NotReachable:    The network is not reachable.
-        - ReachableOnWWAN: The network is reachable over the WWAN connection.
-        - ReachableOnWiFi: The network is reachable over the WiFi connection.
-    */
-
-
     /// Defines the various states of network reachability.
     ///
     /// - unknown:      It is unknown whether the network is reachable.
@@ -124,11 +114,13 @@ public class NetworkReachabilityManager {
     /// - returns: The new `NetworkReachabilityManager` instance.
     public convenience init?() {
         var address = sockaddr_in()
-        address.sin_len = UInt8(sizeofValue(address))
+        address.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
         address.sin_family = sa_family_t(AF_INET)
 
-        guard let reachability = withUnsafePointer(&address, {
-            SCNetworkReachabilityCreateWithAddress(nil, UnsafePointer($0))
+        guard let reachability = withUnsafePointer(to: &address, { pointer in
+            return pointer.withMemoryRebound(to: sockaddr.self, capacity: MemoryLayout<sockaddr>.size) {
+                return SCNetworkReachabilityCreateWithAddress(nil, $0)
+            }
         }) else { return nil }
 
         self.init(reachability: reachability)
@@ -151,7 +143,7 @@ public class NetworkReachabilityManager {
     @discardableResult
     public func startListening() -> Bool {
         var context = SCNetworkReachabilityContext(version: 0, info: nil, retain: nil, release: nil, copyDescription: nil)
-        context.info = UnsafeMutablePointer(Unmanaged.passUnretained(self).toOpaque())
+        context.info = Unmanaged.passUnretained(self).toOpaque()
 
         let callbackEnabled = SCNetworkReachabilitySetCallback(
             reachability,

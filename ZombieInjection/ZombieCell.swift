@@ -20,6 +20,6 @@ class ZombieCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        bnd_bag.dispose()
+        reactive.bag.dispose()
     }
 }

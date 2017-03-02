@@ -36,7 +36,7 @@ struct ZombieService: ZombieServiceProtocol{
     
     private func createFakeZombies() {
         for index in 1...100 {
-            let zombie = Zombie(id: index, name: "Zombie \(index)", imageUrlAddress: "https://placezombie.com/g/200x200")
+            let zombie = Zombie(id: index, name: "Zombie \(index)", imageUrlAddress: "http://stevensegallery.com/200/200")
             self.zombieRepository.insert(zombie)
         }
     }

@@ -22,15 +22,16 @@
 // THE SOFTWARE.
 //
 
-public enum LogLevel {
-  case Verbose
-  case Errors
+public enum LogLevel: Int {
   case None
+  case Errors
+  case Verbose
 }
+
 public var logLevel: LogLevel = .Errors
 
-func log(_ logLevel: LogLevel, _ message: Any) {
-  guard case logLevel = Dip.logLevel else { return }
+func log(level logLevel: LogLevel, _ message: Any) {
+  guard logLevel.rawValue <= Dip.logLevel.rawValue else { return }
   print(message)
 }
 
@@ -41,19 +42,13 @@ protocol BoxType {
 
 extension Optional: BoxType {
   var unboxed: Any? {
-    switch self {
-    case let .some(value): return value
-    default: return nil
-    }
+    return self ?? nil
   }
 }
 
 extension ImplicitlyUnwrappedOptional: BoxType {
   var unboxed: Any? {
-    switch self {
-    case let .some(value): return value
-    default: return nil
-    }
+    return self ?? nil
   }
 }
 
@@ -75,7 +70,12 @@ class WeakBox<T>: WeakBoxType {
   }
 
   init(_ value: T) {
-    guard let value = value as? AnyObject else {
+    #if !_runtime(_ObjC) || !swift(>=3.0)
+      weak var value: AnyObject? = value as? AnyObject
+    #else
+      weak var value: AnyObject? = value as AnyObject
+    #endif
+    guard value != nil else {
       fatalError("Can not store weak reference to not a class instance (\(T.self))")
     }
     self.unboxed = value
@@ -101,17 +101,7 @@ extension Optional {
   }
 }
 
-extension Collection where Index: Comparable, Self.Indices.Index == Index {
-  subscript(safe index: Index) -> Generator.Element? {
-    guard indices.startIndex..<indices.endIndex ~= index else { return nil }
-    return self[index]
-  }
-  subscript(next index: Index) -> Generator.Element? {
-    return self[safe: indices.index(after: index)]
-  }
-}
-
-#if os(Linux)
+#if !_runtime(_ObjC)
   import Glibc
   class RecursiveLock {
     private var _lock = _initializeRecursiveMutex()

@@ -14,7 +14,7 @@ class ZombieDetailViewModel {
     var zombieService: ZombieServiceProtocol
     var goBackCallBack: (() -> ())
     
-    init(zombie: Zombie, zombieService: ZombieServiceProtocol, goBackCallBack: (() -> ()))
+    init(zombie: Zombie, zombieService: ZombieServiceProtocol, goBackCallBack: @escaping (() -> ()))
     {
         self.zombie = zombie
         self.zombieService = zombieService

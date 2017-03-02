@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0800"
+   LastUpgradeVersion = "0700"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E45DA1D484EE2688651391B8CC0EBE69"
+               BlueprintIdentifier = "6B62A8AC6C8FA28135937D472C884F64"
                BuildableName = "Pods_ZombieInjection.framework"
                BlueprintName = "Pods-ZombieInjection"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E45DA1D484EE2688651391B8CC0EBE69"
+            BlueprintIdentifier = "6B62A8AC6C8FA28135937D472C884F64"
             BuildableName = "Pods_ZombieInjection.framework"
             BlueprintName = "Pods-ZombieInjection"
             ReferencedContainer = "container:Pods.xcodeproj">

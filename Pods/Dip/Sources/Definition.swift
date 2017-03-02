@@ -24,165 +24,81 @@
 
 ///A key used to store definitons in a container.
 public struct DefinitionKey : Hashable, CustomStringConvertible {
-  public let protocolType: Any.Type
-  public let argumentsType: Any.Type
-  public private(set) var associatedTag: DependencyContainer.Tag?
-  
-  init(protocolType: Any.Type, argumentsType: Any.Type, associatedTag: DependencyContainer.Tag? = nil) {
-    self.protocolType = protocolType
-    self.argumentsType = argumentsType
-    self.associatedTag = associatedTag
+  public let type: Any.Type
+  public let typeOfArguments: Any.Type
+  public private(set) var tag: DependencyContainer.Tag?
+
+  init(type: Any.Type, typeOfArguments: Any.Type, tag: DependencyContainer.Tag? = nil) {
+    self.type = type
+    self.typeOfArguments = typeOfArguments
+    self.tag = tag
   }
   
   public var hashValue: Int {
-    return "\(protocolType)-\(argumentsType)-\(associatedTag)".hashValue
+    return "\(type)-\(typeOfArguments)-\(tag)".hashValue
   }
   
   public var description: String {
-    return "type: \(protocolType), arguments: \(argumentsType), tag: \(associatedTag.desc)"
+    return "type: \(type), arguments: \(typeOfArguments), tag: \(tag.desc)"
   }
   
-  func tagged(_ tag: DependencyContainer.Tag?) -> DefinitionKey {
+  func tagged(with tag: DependencyContainer.Tag?) -> DefinitionKey {
     var tagged = self
-    tagged.associatedTag = tag
+    tagged.tag = tag
     return tagged
   }
   
 }
 
-/// Check two definition keys on equality by comparing their `protocolType`, `factoryType` and `associatedTag` properties.
+/// Check two definition keys on equality by comparing their `type`, `factoryType` and `tag` properties.
 public func ==(lhs: DefinitionKey, rhs: DefinitionKey) -> Bool {
   return
-    lhs.protocolType == rhs.protocolType &&
-      lhs.argumentsType == rhs.argumentsType &&
-      lhs.associatedTag == rhs.associatedTag
-}
-
-///Component scope defines a strategy used by the `DependencyContainer` to manage resolved instances life cycle.
-public enum ComponentScope {
-  /**
-   A new instance will be created every time it's resolved.
-   This is a default strategy. Use this strategy when you don't want instances to be shared
-   between different consumers (i.e. if it is not thread safe).
-   
-   **Example**:
-   
-   ```
-   container.register { ServiceImp() as Service }
-   container.register { 
-     ServiceConsumerImp(
-       service1: try container.resolve() as Service
-       service2: try container.resolve() as Service
-     ) as ServiceConsumer
-   }
-   let consumer = container.resolve() as ServiceConsumer
-   consumer.service1 !== consumer.service2 //true
-   
-   ```
-   */
-  case Prototype
-  
-  /**
-   Instance resolved with the same definition will be reused until topmost `resolve(tag:)` method returns.
-   When you resolve the same object graph again the container will create new instances.
-   Use this strategy if you want different object in objects graph to share the same instance.
-   
-   - warning: Make sure this component is thread safe or accessed always from the same thread.
-   
-   **Example**:
-   
-   ```
-   container.register(.ObjectGraph) { ServiceImp() as Service }
-   container.register {
-     ServiceConsumerImp(
-       service1: try container.resolve() as Service
-       service2: try container.resolve() as Service
-     ) as ServiceConsumer
-   }
-   let consumer1 = container.resolve() as ServiceConsumer
-   let consumer2 = container.resolve() as ServiceConsumer
-   consumer1.service1 === consumer1.service2 //true
-   consumer2.service1 === consumer2.service2 //true
-   consumer1.service1 !== consumer2.service1 //true
-   ```
-   */
-  case ObjectGraph
-
-  /**
-   Resolved instance will be retained by the container and always reused.
-   Do not mix this life cycle with _singleton pattern_.
-   Instance will be not shared between different containers unless they collaborate.
-   
-   - warning: Make sure this component is thread safe or accessed always from the same thread.
-   
-   - note: When you override or remove definition from the container an instance 
-           that was resolved with this definition will be released. When you reset 
-           the container it will release all singleton instances.
-   
-   **Example**:
-   
-   ```
-   container.register(.Singleton) { ServiceImp() as Service }
-   container.register {
-     ServiceConsumerImp(
-       service1: try container.resolve() as Service
-       service2: try container.resolve() as Service
-     ) as ServiceConsumer
-   }
-   let consumer1 = container.resolve() as ServiceConsumer
-   let consumer2 = container.resolve() as ServiceConsumer
-   consumer1.service1 === consumer1.service2 //true
-   consumer2.service1 === consumer2.service2 //true
-   consumer1.service1 === consumer2.service1 //true
-   ```
-   */
-  case Singleton
-  
-  /**
-   The same scope as a `Singleton`, but instance will be created when container is bootstrapped.
-   
-   - seealso: `bootstrap()`
-  */
-  case EagerSingleton
-  
-  /**
-   The same scope as a `Singleton`, but container stores week reference to the resolved instance.
-   While a strong reference to the resolved instance exists resolve will return the same instance.
-   After the resolved instance is deallocated next resolve will produce a new instance.
-  */
-  case WeakSingleton
+    lhs.type == rhs.type &&
+      lhs.typeOfArguments == rhs.typeOfArguments &&
+      lhs.tag == rhs.tag
 }
 
 ///Dummy protocol to store definitions for different types in collection
-public protocol Definition: class { }
+public protocol DefinitionType: class { }
 
 /**
- `DefinitionOf<T, F>` describes how instances of type `T` should be created when this type is resolved by the `DependencyContainer`.
+ `Definition<T, U>` describes how instances of type `T` should be created when this type is resolved by the `DependencyContainer`.
  
  - `T` is the type of the instance to resolve
- - `F` is the type of the factory that will create an instance of T.
+ - `U` is the type of runtime arguments accepted by factory that will create an instance of T.
  
- For example `DefinitionOf<Service, (String) -> Service>` is the type of definition that will create an instance of type `Service` using factory that accepts `String` argument.
+ For example `Definition<Service, String>` is the type of definition that will create an instance of type `Service` using factory that accepts `String` argument.
 */
-public final class DefinitionOf<T, F>: Definition {
+public final class Definition<T, U>: DefinitionType {
+  public typealias F = (U) throws -> T
   
+  //MARK: - _Definition
+
+  weak var container: DependencyContainer?
+  
+  let factory: F
+  let scope: ComponentScope
+  var weakFactory: ((Any) throws -> Any)!
+  var resolveProperties: ((DependencyContainer, Any) throws -> ())?
+  
+  #if swift(>=3.0)
+  init(scope: ComponentScope, factory: @escaping F) {
+    self.factory = factory
+    self.scope = scope
+  }
+  #else
   init(scope: ComponentScope, factory: F) {
     self.factory = factory
     self.scope = scope
   }
-  
-  //MARK: - _Definition
+  #endif
 
-  let factory: F
-  let scope: ComponentScope
-  private(set) var weakFactory: ((Any) throws -> Any)!
-  private(set) var resolveDependenciesBlock: ((DependencyContainer, Any) throws -> ())?
-  
+  #if swift(>=3.0)
   /**
    Set the block that will be used to resolve dependencies of the instance.
    This block will be called before `resolve(tag:)` returns.
    
-   - parameter block: The block to use to resolve dependencies of the instance.
+   - parameter block: The block to resolve property dependencies of the instance.
    
    - returns: modified definition
    
@@ -198,33 +114,80 @@ public final class DefinitionOf<T, F>: Definition {
    container.register { ClientImp(service: try container.resolve() as Service) as Client }
    
    container.register { ServiceImp() as Service }
-     .resolveDependencies { container, service in
+     .resolvingProperties { container, service in
        service.client = try container.resolve() as Client
      }
    ```
    
    */
-  @discardableResult public func resolveDependencies(_ block: (DependencyContainer, T) throws -> ()) -> DefinitionOf {
-    let oldBlock = self.resolveDependenciesBlock
-    self.resolveDependenciesBlock = {
-      try oldBlock?($0, $1 as! T)
-      try block($0, $1 as! T)
+  @discardableResult public func resolvingProperties(_ block: @escaping (DependencyContainer, T) throws -> ()) -> Definition {
+    if let oldBlock = self.resolveProperties {
+      self.resolveProperties = {
+        try oldBlock($0, $1 as! T)
+        try block($0, $1 as! T)
+      }
+    }
+    else {
+      self.resolveProperties = { try block($0, $1 as! T) }
     }
     return self
   }
-  
+  #else
+  /**
+   Set the block that will be used to resolve dependencies of the instance.
+   This block will be called before `resolve(tag:)` returns.
+   
+   - parameter block: The block to resolve property dependencies of the instance.
+   
+   - returns: modified definition
+   
+   - note: To resolve circular dependencies at least one of them should use this block
+           to resolve its dependencies. Otherwise the application will enter an infinite loop and crash.
+   
+   - note: You can call this method several times on the same definition.
+           Container will call all provided blocks in the same order.
+   
+   **Example**
+   
+   ```swift
+   container.register { ClientImp(service: try container.resolve() as Service) as Client }
+   
+   container.register { ServiceImp() as Service }
+     .resolvingProperties { container, service in
+       service.client = try container.resolve() as Client
+   }
+   ```
+   
+   */
+  public func resolvingProperties(block: (DependencyContainer, T) throws -> ()) -> Definition {
+    if let oldBlock = self.resolveProperties {
+      self.resolveProperties = {
+        try oldBlock($0, $1 as! T)
+        try block($0, $1 as! T)
+      }
+    }
+    else {
+      self.resolveProperties = { try block($0, $1 as! T) }
+    }
+    return self
+  }
+  #endif
+
   /// Calls `resolveDependencies` block if it was set.
-  func resolveDependenciesOf(_ resolvedInstance: Any, withContainer container: DependencyContainer) throws {
-    guard let resolvedInstance = resolvedInstance as? T else { return }
-    if let resolveDependenciesBlock = self.resolveDependenciesBlock {
-      try resolveDependenciesBlock(container, resolvedInstance)
+  func resolveProperties(of instance: Any, container: DependencyContainer) throws {
+    guard let resolvedInstance = instance as? T else { return }
+    if let forwardsTo = forwardsTo {
+      try forwardsTo.resolveProperties(of: resolvedInstance, container: container)
+    }
+    if let resolveProperties = self.resolveProperties {
+      try resolveProperties(container, resolvedInstance)
     }
   }
   
   //MARK: - AutoWiringDefinition
   
-  private(set) var autoWiringFactory: ((DependencyContainer, DependencyContainer.Tag?) throws -> Any)?
-  private(set) var numberOfArguments: Int?
+  var autoWiringFactory: ((DependencyContainer, DependencyContainer.Tag?) throws -> Any)?
+  var numberOfArguments: Int = 0
   
   //MARK: - TypeForwardingDefinition
   
@@ -232,69 +195,81 @@ public final class DefinitionOf<T, F>: Definition {
   private(set) var implementingTypes: [Any.Type] = [(T?).self, (T!).self]
   
   /// Return `true` if type can be resolved using this definition
-  func doesImplements(_ type: Any.Type) -> Bool {
-    return implementingTypes.contains(where: { $0 == type })
+  func doesImplements(type aType: Any.Type) -> Bool {
+    return implementingTypes.contains(where: { $0 == aType })
   }
   
   //MARK: - _TypeForwardingDefinition
 
   /// Adds type as being able to be resolved using this definition
-  private func implements(_ type: Any.Type) {
-    implements([type])
+  func _implements(type aType: Any.Type) {
+    _implements(types: [aType])
   }
   
   /// Adds types as being able to be resolved using this definition
-  private func implements(_ types: [Any.Type]) {
-    implementingTypes.append(contentsOf: types.filter({ !doesImplements($0) }))
+  func _implements(types aTypes: [Any.Type]) {
+    implementingTypes.append(contentsOf: aTypes.filter({ !doesImplements(type: $0) }))
   }
-
+  
   /// Definition to which resolution will be forwarded to
-  private weak var forwardsToDefinition: _TypeForwardingDefinition? {
+  weak var forwardsTo: _TypeForwardingDefinition? {
     didSet {
-      if let forwardsToDefinition = forwardsToDefinition {
-        implements(forwardsToDefinition.type)
-        implements(forwardsToDefinition.implementingTypes)
+      //both definitions (self and forwardsTo) can resolve
+      //each other types and each other implementing types
+      //this relationship can be used to reuse previously resolved instances
+      if let forwardsTo = forwardsTo {
+        _implements(type: forwardsTo.type)
+        _implements(types: forwardsTo.implementingTypes)
         
-        for definition in [forwardsToDefinition] + forwardsToDefinition.forwardsFromDefinitions {
-          definition.implements(type)
-          definition.implements(implementingTypes)
+        //definitions for types that can be resolved by `forwardsTo` definition
+        //can also be used to resolve self type and it's implementing types
+        //this way container properly reuses previosly resolved instances
+        //when there are several forwarded definitions
+        //see testThatItReusesInstanceResolvedByTypeForwarding)
+        for definition in forwardsTo.forwardsFrom {
+          definition._implements(type: type)
+          definition._implements(types: implementingTypes)
         }
-        forwardsToDefinition.forwardsFromDefinitions.append(self)
-        resolveDependencies({ try forwardsToDefinition.resolveDependenciesOf($1, withContainer: $0) })
+        
+        //forwardsTo can be used to resolve self type and it's implementing types
+        forwardsTo._implements(type: type)
+        forwardsTo._implements(types: implementingTypes)
+        forwardsTo.forwardsFrom.append(self)
       }
     }
   }
   
   /// Definitions that will forward resolution to this definition
-  private var forwardsFromDefinitions: [_TypeForwardingDefinition] = []
+  var forwardsFrom: [_TypeForwardingDefinition] = []
   
 }
 
 //MARK: - _Definition
 
-protocol _Definition: Definition, AutoWiringDefinition, TypeForwardingDefinition {
+protocol _Definition: DefinitionType, AutoWiringDefinition, TypeForwardingDefinition {
   var type: Any.Type { get }
   var scope: ComponentScope { get }
   var weakFactory: ((Any) throws -> Any)! { get }
-  func resolveDependenciesOf(_ resolvedInstance: Any, withContainer container: DependencyContainer) throws
+  func resolveProperties(of instance: Any, container: DependencyContainer) throws
+  var container: DependencyContainer? { get set }
 }
 
 //MARK: - Type Forwarding
 
-private protocol _TypeForwardingDefinition: TypeForwardingDefinition, _Definition {
-  weak var forwardsToDefinition: _TypeForwardingDefinition? { get set }
-  var forwardsFromDefinitions: [_TypeForwardingDefinition] { get set }
-  func implements(_ type: Any.Type)
-  func implements(_ type: [Any.Type])
+protocol _TypeForwardingDefinition: TypeForwardingDefinition, _Definition {
+  weak var forwardsTo: _TypeForwardingDefinition? { get }
+  var forwardsFrom: [_TypeForwardingDefinition] { get set }
+  func _implements(type aType: Any.Type)
+  func _implements(types aTypes: [Any.Type])
 }
 
-extension DefinitionOf: _TypeForwardingDefinition {
+extension Definition: _TypeForwardingDefinition {
   var type: Any.Type {
     return T.self
   }
 }
 
-extension DefinitionOf: CustomStringConvertible {
+extension Definition: CustomStringConvertible {
   public var description: String {
     return "type: \(T.self), factory: \(F.self), scope: \(scope)"
   }
@@ -303,30 +278,62 @@ extension DefinitionOf: CustomStringConvertible {
 //MARK: - Definition Builder
 
 /// Internal class used to build definition
-/// Need this builder as alternative to changing to DefinitionOf<T, U> where U - type of arguments
 class DefinitionBuilder<T, U> {
   typealias F = (U) throws -> T
   
   var scope: ComponentScope!
   var factory: F!
   
-  var numberOfArguments: Int?
+  var numberOfArguments: Int = 0
   var autoWiringFactory: ((DependencyContainer, DependencyContainer.Tag?) throws -> T)?
   
-  var forwardsDefinition: _Definition?
+  var forwardsTo: _Definition?
   
-  init(configure: @noescape (DefinitionBuilder) -> ()) {
+  init(configure: (DefinitionBuilder) -> ()) {
     configure(self)
   }
   
-  func build() -> DefinitionOf<T, F> {
+  func build() -> Definition<T, U> {
     let factory = self.factory!
-    let definition = DefinitionOf<T, F>(scope: scope, factory: factory)
+    let definition = Definition<T, U>(scope: scope, factory: factory)
     definition.numberOfArguments = numberOfArguments
     definition.autoWiringFactory = autoWiringFactory
     definition.weakFactory = { try factory($0 as! U) }
-    definition.forwardsToDefinition = forwardsDefinition as? _TypeForwardingDefinition
+    definition.forwardsTo = forwardsTo as? _TypeForwardingDefinition
     return definition
   }
 }
 
+//MARK: - KeyDefinitionPair
+
+typealias KeyDefinitionPair = (key: DefinitionKey, definition: _Definition)
+
+/// Definitions are matched if they are registered for the same tag and thier factories accept the same number of runtime arguments.
+private func ~=(lhs: KeyDefinitionPair, rhs: KeyDefinitionPair) -> Bool {
+  guard lhs.key.type == rhs.key.type else { return false }
+  guard lhs.key.tag == rhs.key.tag else { return false }
+  guard lhs.definition.numberOfArguments == rhs.definition.numberOfArguments else { return false }
+  return true
+}
+
+/// Returns key-defintion pairs with definitions able to resolve that type (directly or via type forwarding)
+/// and which tag matches provided key's tag or is nil.
+/// In the end filters defintions by type of runtime arguments.
+func filter(definitions _definitions: [KeyDefinitionPair], byKey key: DefinitionKey, byTypeOfArguments: Bool = false) -> [KeyDefinitionPair] {
+  let definitions = _definitions
+    .filter({ $0.key.type == key.type || $0.definition.doesImplements(type: key.type) })
+    .filter({ $0.key.tag == key.tag || $0.key.tag == nil })
+  if byTypeOfArguments {
+    return definitions.filter({ $0.key.typeOfArguments == key.typeOfArguments })
+  }
+  else {
+    return definitions
+  }
+}
+
+/// Orders key-definition pairs putting first definitions registered for provided tag.
+func order(definitions _definitions: [KeyDefinitionPair], byTag tag: DependencyContainer.Tag?) -> [KeyDefinitionPair] {
+  return
+    _definitions.filter({ $0.key.tag == tag }) +
+      _definitions.filter({ $0.key.tag != tag })
+}
