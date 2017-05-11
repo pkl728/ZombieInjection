@@ -13,18 +13,13 @@ public struct Zombie: Persistable, ImageDownloadable {
     
     var id: Int
     var name: Observable<String?>
-    var imageUrl: URL?
+    var imageURL: URL?
     var image: Observable<UIImage?>
     
-    init(id: Int, name: String, imageUrlAddress: String?) {
+    init(id: Int, name: String, imageURL: URL?) {
         self.id = id
         self.name = Observable(name)
         self.image = Observable<UIImage?>(nil)
-        if imageUrlAddress != nil {
-            self.imageUrl = URL(string: imageUrlAddress!)
-        }
-        else {
-            self.imageUrl = nil
-        }
+        self.imageURL = imageURL
     }
 }

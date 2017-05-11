@@ -18,9 +18,9 @@ class ZombieRepositoryMock: Repository<Zombie> {
         // Just use the InMemoryDataService for testing purposes.
         self.dataService = InMemoryDataService()
         self.dataService.deleteAllZombies()
-        self.dataService.insertZombies(Array<Zombie>([ Zombie(id: 0, name: "First", imageUrlAddress: "http://test.com"),
-                                          Zombie(id: 1, name: "Second", imageUrlAddress: "http://test.com"),
-                                          Zombie(id: 2, name: "Third", imageUrlAddress: "http://test.com") ]))
+        self.dataService.insertZombies(Array<Zombie>([ Zombie(id: 0, name: "First", imageURL: URL(string: "http://test.com")),
+                                                       Zombie(id: 1, name: "Second", imageURL: URL(string: "http://test.com")),
+                                                       Zombie(id: 2, name: "Third", imageURL: URL(string: "http://test.com")) ]))
     }
     
     override func get(_ id: Int) -> Zombie? {

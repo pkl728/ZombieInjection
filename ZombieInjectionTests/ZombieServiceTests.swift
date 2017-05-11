@@ -71,7 +71,7 @@ class ZombieServiceTests: XCTestCase {
     
     func testUpdateWithNonExistentZombieDoesNothing() {
         // Arrange
-        let badZombie = Zombie(id: -1, name: "Bad", imageUrlAddress: nil)
+        let badZombie = Zombie(id: -1, name: "Bad", imageURL: nil)
         
         // Act
         self.zombieService.update(badZombie)

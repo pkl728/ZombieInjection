@@ -29,7 +29,7 @@ class AlamofireImageServiceTests: XCTestCase {
     
     func testRequestImageForImageAlreadyFilledInReturnsImmediately() {
         // Arrange
-        var zombie = Zombie(id: 0, name: "Test", imageUrlAddress: nil)
+        var zombie = Zombie(id: 0, name: "Test", imageURL: nil)
         let icon = UIImage()
         zombie.image = Observable(icon)
         
@@ -42,7 +42,7 @@ class AlamofireImageServiceTests: XCTestCase {
     
     func testRequestImageForNewImageProperlyDownloads() {
         // Arrange
-        let zombie = Zombie(id: 0, name: "Test", imageUrlAddress: "http://test.com")
+        let zombie = Zombie(id: 0, name: "Test", imageURL: URL(string: "http://test.com"))
         self.imageDownloader.responseIsSuccess = true
         
         // Act
@@ -54,7 +54,7 @@ class AlamofireImageServiceTests: XCTestCase {
     
     func testRequestImageForNewImageDoesNotSetImageIfFail() {
         // Arrange
-        let zombie = Zombie(id: 0, name: "Test", imageUrlAddress: "http://test.com")
+        let zombie = Zombie(id: 0, name: "Test", imageURL: URL(string: "http://test.com"))
         self.imageDownloader.responseIsSuccess = false
         
         // Act

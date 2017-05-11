@@ -20,7 +20,7 @@ class ZombieDetailViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        zombieSelected = Zombie(id: 0, name: "Selected", imageUrlAddress: nil)
+        zombieSelected = Zombie(id: 0, name: "Selected", imageURL: nil)
         zombieRepositoryMock = ZombieRepositoryMock()
         zombieRepositoryMock.deleteAll()
         zombieRepositoryMock.insert(zombieSelected)
