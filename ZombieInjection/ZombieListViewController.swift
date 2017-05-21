@@ -13,7 +13,7 @@ import UIKit
 
 class ZombieListViewController: UIViewController, UITableViewDelegate {
     
-    let viewModel = ZombieListViewModel()
+    var viewModel: ZombieListViewModel!
     
     private var dataSource = ObservableArray<Zombie>()
     

@@ -12,11 +12,13 @@ import Foundation
 
 class ZombieListViewModel {
     
-    var zombieService: ZombieServiceProtocol!
-    var imageDownloadService: ImageDownloadService!
+    var zombieService: ZombieServiceProtocol
+    var imageDownloadService: ImageDownloadService
     var tableMembers: ObservableArray<Zombie>
 
-    init() {
+    init(zombieService: ZombieServiceProtocol, imageDownloadService: ImageDownloadService) {
+        self.zombieService = zombieService
+        self.imageDownloadService = imageDownloadService
         self.tableMembers = ObservableArray([])
     }
     

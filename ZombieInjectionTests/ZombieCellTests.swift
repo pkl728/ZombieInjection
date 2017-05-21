@@ -20,10 +20,9 @@ class ZombieCellTests: XCTestCase {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         viewController = storyboard.instantiateViewController(withIdentifier: "ZombieList") as! ZombieListViewController
         let repository = ZombieRepositoryMock()
-        viewController.viewModel.zombieService = ZombieServiceMock(zombieRepository: repository)
         imageDownloader = ImageDownloaderMock()
         imageDownloader.responseIsSuccess = true
-        viewController.viewModel.imageDownloadService = AlamofireImageService(imageDownloader: imageDownloader)
+        viewController.viewModel = ZombieListViewModel(zombieService: ZombieServiceMock(zombieRepository: repository), imageDownloadService: AlamofireImageService(imageDownloader: imageDownloader))
         
         _ = viewController.view // Force loading subviews and setting outlets
     }

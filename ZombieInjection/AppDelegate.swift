@@ -20,8 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if let navViewController = self.window?.rootViewController as? UINavigationController {
             if let zombieListViewController = navViewController.topViewController as? ZombieListViewController {
-                zombieListViewController.viewModel.zombieService = zombieService
-                zombieListViewController.viewModel.imageDownloadService = imageDownloadService
+                let zombieListViewModel = ZombieListViewModel(zombieService: zombieService, imageDownloadService: imageDownloadService)
+                zombieListViewController.viewModel = zombieListViewModel
             }
         }
         return true
