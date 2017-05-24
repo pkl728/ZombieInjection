@@ -26,57 +26,149 @@ protocol RepositoryProtocol: class {
     func update(_ object: Object) -> Void
 }
 
-class Repository<T: Persistable>: RepositoryProtocol {
+class AnyDataServiceProtocol<U>: DataServiceProtocol {
+    typealias T = U
     
-    func get(_ id: Int) -> T? {
-        fatalError(#function + " must be overridden")
+    let _get: (Int) -> U?
+    let _getWithPredicate: ((U) throws -> Bool) -> U?
+    let _getAll: () -> Array<U>?
+    let _getAllWithPredicate: ((U) throws -> Bool) -> Array<U>?
+    let _contains: ((U) throws -> Bool) -> Bool
+    let _insert: (U) -> Void
+    let _insertAll: (Array<U>) -> Void
+    let _delete: (U) -> Void
+    let _deleteAllWithPredicate: ((U) throws -> Bool) -> Void
+    let _deleteAll: () -> Void
+    let _count: () -> Int
+    let _countWithPredicate: ((U) throws -> Bool) -> Int
+    let _update: (U) -> Void
+    
+    init<T: DataServiceProtocol>(base: T) where T.ItemType == U {
+        self._get = base.get
+        self._getWithPredicate = base.get
+        self._getAll = base.getAll
+        self._getAllWithPredicate = base.getAll
+        self._contains = base.contains
+        self._insert = base.insert
+        self._insertAll = base.insertAll
+        self._delete = base.delete
+        self._deleteAllWithPredicate = base.deleteAll
+        self._deleteAll = base.deleteAll
+        self._count = base.count
+        self._countWithPredicate = base.count
+        self._update = base.update
     }
     
-    func get(_ predicate: (T) throws -> Bool) -> T? {
-        fatalError(#function + " must be overridden")
+    func get(_ id: Int) -> U? {
+        return _get(id)
     }
     
-    func getAll() -> Array<T>? {
-        fatalError(#function + " must be overridden")
+    func get(_ predicate: (U) throws -> Bool) -> U? {
+        return _getWithPredicate(predicate)
     }
     
-    func getAll(_ predicate: (T) throws -> Bool) -> Array<T>? {
-        fatalError(#function + " must be overridden")
+    func getAll() -> Array<U>? {
+        return _getAll()
     }
     
-    func contains(_ predicate: (T) throws -> Bool) -> Bool {
-        fatalError(#function + " must be overridden")
+    func getAll(_ predicate: (U) throws -> Bool) -> Array<U>? {
+        return _getAllWithPredicate(predicate)
     }
     
-    func insert(_ object: T) {
-        fatalError(#function + " must be overridden")
+    func contains(_ predicate: (U) throws -> Bool) -> Bool {
+        return _contains(predicate)
     }
     
-    func insertAll(_ objects: Array<T>) {
-        fatalError(#function + " must be overridden")
+    func insert(_ item: U) {
+        return _insert(item)
     }
     
-    func delete(_ object: T) {
-        fatalError(#function + " must be overridden")
+    func insertAll(_ itemsToInsert: Array<U>) {
+        return _insertAll(itemsToInsert)
+    }
+    
+    func delete(_ item: U) {
+        return _delete(item)
+    }
+    
+    func deleteAll(_ predicate: (U) throws -> Bool) {
+        return _deleteAllWithPredicate(predicate)
     }
     
     func deleteAll() {
-        fatalError(#function + " must be overridden")
-    }
-    
-    func deleteAll(_ predicate: (T) throws -> Bool) {
-        fatalError(#function + " must be overridden")
-    }
-    
-    func update(_ object: T) {
-        fatalError(#function + " must be overridden")
+        return _deleteAll()
     }
     
     func count() -> Int {
-        fatalError(#function + " must be overridden")
+        return _count()
+    }
+    
+    func count(_ predicate: (U) throws -> Bool) -> Int {
+        return _countWithPredicate(predicate)
+    }
+    
+    func update(_ item: U) {
+        return _update(item)
+    }
+}
+
+class Repository<T: Persistable>: RepositoryProtocol {
+    
+    private var dataService: AnyDataServiceProtocol<T>
+    
+    init(dataService: AnyDataServiceProtocol<T>) {
+        self.dataService = dataService
+    }
+    
+    func get(_ id: Int) -> T? {
+        return self.dataService.get(id)
+    }
+    
+    func get(_ predicate: (T) throws -> Bool) -> T? {
+        return self.dataService.get(predicate)
+    }
+    
+    func getAll() -> Array<T>? {
+        return self.dataService.getAll()
+    }
+    
+    func getAll(_ predicate: (T) throws -> Bool) -> Array<T>? {
+        return self.getAll(predicate)
+    }
+    
+    func contains(_ predicate: (T) throws -> Bool) -> Bool {
+        return self.dataService.contains(predicate)
+    }
+    
+    func insert(_ object: T) {
+        return self.dataService.insert(object)
+    }
+    
+    func insertAll(_ objects: Array<T>) {
+        return self.dataService.insertAll(objects)
+    }
+    
+    func delete(_ object: T) {
+        return self.dataService.delete(object)
+    }
+    
+    func deleteAll() {
+        return self.dataService.deleteAll()
+    }
+    
+    func deleteAll(_ predicate: (T) throws -> Bool) {
+        return self.dataService.deleteAll(predicate)
+    }
+    
+    func update(_ object: T) {
+        return self.dataService.update(object)
+    }
+    
+    func count() -> Int {
+        return self.dataService.count()
     }
     
     func count(_ predicate: (T) throws -> Bool) -> Int {
-        fatalError(#function + " must be overridden")
+        return self.dataService.count(predicate)
     }
 }
