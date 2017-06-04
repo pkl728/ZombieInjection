@@ -14,9 +14,8 @@ extension DependencyContainer {
     static func configure() -> DependencyContainer {
         return DependencyContainer { container in
             // Use an in memory service for testing. You would probably implement a CoreData or SQLite service here.
-            container.register(.singleton) { InMemoryDataService() as DataServiceProtocol }
             container.register(.singleton) { AlamofireImageService(imageDownloader: ImageDownloader()) as ImageDownloadService }
-            container.register(.singleton) { ZombieRepository(dataService: try! container.resolve() as AnyDataServiceProtocol<Zombie>) as Repository<Zombie> }
+            container.register(.singleton) { ZombieRepository(dataService: InMemoryDataService<Zombie>()) as Repository<Zombie> }
             container.register(.singleton) { ZombieService(zombieRepository: try! container.resolve() as Repository<Zombie>) as ZombieServiceProtocol }
         }
     }

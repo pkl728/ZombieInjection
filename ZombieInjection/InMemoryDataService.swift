@@ -8,9 +8,8 @@
 
 import Foundation
 
-class InMemoryDataService: AnyDataServiceProtocol<Persistable> {
-    typealias ItemType = Persistable
-
+class InMemoryDataService<ItemType: Persistable>: AnyDataService<ItemType> {
+    
     private var items = Array<ItemType>()
     
     override func get(_ id: Int) -> ItemType? {

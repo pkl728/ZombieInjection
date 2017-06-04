@@ -26,97 +26,11 @@ protocol RepositoryProtocol: class {
     func update(_ object: Object) -> Void
 }
 
-class AnyDataServiceProtocol<U>: DataServiceProtocol {
-    typealias T = U
-    
-    let _get: (Int) -> U?
-    let _getWithPredicate: ((U) throws -> Bool) -> U?
-    let _getAll: () -> Array<U>?
-    let _getAllWithPredicate: ((U) throws -> Bool) -> Array<U>?
-    let _contains: ((U) throws -> Bool) -> Bool
-    let _insert: (U) -> Void
-    let _insertAll: (Array<U>) -> Void
-    let _delete: (U) -> Void
-    let _deleteAllWithPredicate: ((U) throws -> Bool) -> Void
-    let _deleteAll: () -> Void
-    let _count: () -> Int
-    let _countWithPredicate: ((U) throws -> Bool) -> Int
-    let _update: (U) -> Void
-    
-    init<T: DataServiceProtocol>(base: T) where T.ItemType == U {
-        self._get = base.get
-        self._getWithPredicate = base.get
-        self._getAll = base.getAll
-        self._getAllWithPredicate = base.getAll
-        self._contains = base.contains
-        self._insert = base.insert
-        self._insertAll = base.insertAll
-        self._delete = base.delete
-        self._deleteAllWithPredicate = base.deleteAll
-        self._deleteAll = base.deleteAll
-        self._count = base.count
-        self._countWithPredicate = base.count
-        self._update = base.update
-    }
-    
-    func get(_ id: Int) -> U? {
-        return _get(id)
-    }
-    
-    func get(_ predicate: (U) throws -> Bool) -> U? {
-        return _getWithPredicate(predicate)
-    }
-    
-    func getAll() -> Array<U>? {
-        return _getAll()
-    }
-    
-    func getAll(_ predicate: (U) throws -> Bool) -> Array<U>? {
-        return _getAllWithPredicate(predicate)
-    }
-    
-    func contains(_ predicate: (U) throws -> Bool) -> Bool {
-        return _contains(predicate)
-    }
-    
-    func insert(_ item: U) {
-        return _insert(item)
-    }
-    
-    func insertAll(_ itemsToInsert: Array<U>) {
-        return _insertAll(itemsToInsert)
-    }
-    
-    func delete(_ item: U) {
-        return _delete(item)
-    }
-    
-    func deleteAll(_ predicate: (U) throws -> Bool) {
-        return _deleteAllWithPredicate(predicate)
-    }
-    
-    func deleteAll() {
-        return _deleteAll()
-    }
-    
-    func count() -> Int {
-        return _count()
-    }
-    
-    func count(_ predicate: (U) throws -> Bool) -> Int {
-        return _countWithPredicate(predicate)
-    }
-    
-    func update(_ item: U) {
-        return _update(item)
-    }
-}
-
 class Repository<T: Persistable>: RepositoryProtocol {
     
-    private var dataService: AnyDataServiceProtocol<T>
+    private var dataService: AnyDataService<T>
     
-    init(dataService: AnyDataServiceProtocol<T>) {
+    init(dataService: AnyDataService<T>) {
         self.dataService = dataService
     }
     
