@@ -9,7 +9,7 @@
 import Foundation
 
 protocol DataServiceProtocol: class {
-    associatedtype ItemType
+    associatedtype ItemType: Persistable
     
     func get(_ id: Int) -> ItemType?
     func get(_ predicate: (ItemType) throws -> Bool) -> ItemType?
@@ -26,8 +26,7 @@ protocol DataServiceProtocol: class {
     func update(_ item: ItemType) -> Void
 }
 
-class AnyDataService<ItemType>: DataServiceProtocol {
-    typealias ItemType = Persistable
+class AnyDataService<ItemType: Persistable>: DataServiceProtocol {
     
     private let box: _AnyDataServiceBoxBase<ItemType>
     
@@ -39,7 +38,7 @@ class AnyDataService<ItemType>: DataServiceProtocol {
         return self.box.get(id)
     }
     
-    func get(_ predicate: (Persistable) throws -> Bool) -> ItemType? {
+    func get(_ predicate: (ItemType) throws -> Bool) -> ItemType? {
         return self.box.get(predicate)
     }
     
@@ -88,7 +87,7 @@ class AnyDataService<ItemType>: DataServiceProtocol {
     }
 }
 
-fileprivate class _AnyDataServiceBoxBase<T>: DataServiceProtocol {
+fileprivate class _AnyDataServiceBoxBase<T: Persistable>: DataServiceProtocol {
     typealias ItemType = T
 
     func get(_ id: Int) -> ItemType? {

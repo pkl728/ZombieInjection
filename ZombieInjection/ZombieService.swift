@@ -14,7 +14,7 @@ protocol ZombieServiceProtocol {
     func getAllZombies() -> Array<Zombie>?
 }
 
-struct ZombieService: ZombieServiceProtocol{
+struct ZombieService: ZombieServiceProtocol {
     private var zombieRepository: Repository<Zombie>
     
     init(zombieRepository: Repository<Zombie>) {

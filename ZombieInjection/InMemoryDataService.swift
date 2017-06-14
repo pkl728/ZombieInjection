@@ -8,15 +8,15 @@
 
 import Foundation
 
-class InMemoryDataService<ItemType: Persistable>: AnyDataService<ItemType> {
+class InMemoryDataService<ItemType>: DataServiceProtocol where ItemType: Persistable {
     
     private var items = Array<ItemType>()
     
-    override func get(_ id: Int) -> ItemType? {
+    func get(_ id: Int) -> ItemType? {
         return get({$0.id == id})
     }
     
-    override func get(_ predicate: (ItemType) throws -> Bool) -> ItemType? {
+    func get(_ predicate: (ItemType) throws -> Bool) -> ItemType? {
         do {
             guard let foundIndex = try self.items.index(where: predicate) else {
                 return nil
@@ -29,18 +29,18 @@ class InMemoryDataService<ItemType: Persistable>: AnyDataService<ItemType> {
         return nil
     }
     
-    override func getAll() -> Array<ItemType>? {
+    func getAll() -> Array<ItemType>? {
         return self.items
     }
     
-    override func getAll(_ predicate: (ItemType) throws -> Bool) -> Array<ItemType>? {
+    func getAll(_ predicate: (ItemType) throws -> Bool) -> Array<ItemType>? {
         guard let items = try? self.items.filter(predicate) else {
             return nil
         }
         return items
     }
     
-    override func contains(_ predicate: (ItemType) throws -> Bool) -> Bool {
+    func contains(_ predicate: (ItemType) throws -> Bool) -> Bool {
         var containsItem = false
         do {
             containsItem = try self.items.contains(where: predicate)
@@ -51,22 +51,22 @@ class InMemoryDataService<ItemType: Persistable>: AnyDataService<ItemType> {
         return containsItem
     }
     
-    override func insert(_ item: ItemType) {
+    func insert(_ item: ItemType) {
         self.items.append(item)
     }
     
-    override func insertAll(_ itemsToInsert: Array<ItemType>) {
+    func insertAll(_ itemsToInsert: Array<ItemType>) {
         self.items.append(contentsOf: itemsToInsert)
     }
     
-    override func delete(_ item: ItemType) {
+    func delete(_ item: ItemType) {
         guard let foundIndex = self.items.index(where: {$0.id == item.id}) else {
             return
         }
         self.items.remove(at: foundIndex)
     }
     
-    override func deleteAll(_ predicate: (ItemType) throws -> Bool) {
+    func deleteAll(_ predicate: (ItemType) throws -> Bool) {
         guard let itemsToRemove = try? self.items.filter(predicate) else {
             return
         }
@@ -76,22 +76,22 @@ class InMemoryDataService<ItemType: Persistable>: AnyDataService<ItemType> {
         }
     }
     
-    override func deleteAll() {
+    func deleteAll() {
         self.items.removeAll()
     }
     
-    override func update(_ item: ItemType) {
+    func update(_ item: ItemType) {
         guard let foundIndex = self.items.index(where: {$0.id == item.id}) else {
             return
         }
         self.items.insert(item, at: foundIndex)
     }
     
-    override func count() -> Int {
+    func count() -> Int {
         return self.items.count
     }
     
-    override func count(_ predicate: (ItemType) throws -> Bool) -> Int {
+    func count(_ predicate: (ItemType) throws -> Bool) -> Int {
         guard let itemsToCount = try? self.items.filter(predicate) else {
             return 0
         }
