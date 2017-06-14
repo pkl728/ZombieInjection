@@ -8,20 +8,20 @@
 
 import Foundation
 
-class InMemoryDataService: DataServiceProtocol {
+class InMemoryDataService<ItemType>: DataServiceProtocol where ItemType: Persistable {
     
-    private var zombies = Array<Zombie>()
+    private var items = Array<ItemType>()
     
-    func getZombie(_ id: Int) -> Zombie? {
-        return getZombie({$0.id == id})
+    func get(_ id: Int) -> ItemType? {
+        return get({$0.id == id})
     }
     
-    func getZombie(_ predicate: (Zombie) throws -> Bool) -> Zombie? {
+    func get(_ predicate: (ItemType) throws -> Bool) -> ItemType? {
         do {
-            guard let foundIndex = try self.zombies.index(where: predicate) else {
+            guard let foundIndex = try self.items.index(where: predicate) else {
                 return nil
             }
-            return self.zombies[foundIndex]
+            return self.items[foundIndex]
         }
         catch {
             print("Problem getting item array index")
@@ -29,21 +29,21 @@ class InMemoryDataService: DataServiceProtocol {
         return nil
     }
     
-    func getAllZombies() -> Array<Zombie>? {
-        return self.zombies
+    func getAll() -> Array<ItemType>? {
+        return self.items
     }
     
-    func getZombies(_ predicate: (Zombie) throws -> Bool) -> Array<Zombie>? {
-        guard let items = try? self.zombies.filter(predicate) else {
+    func getAll(_ predicate: (ItemType) throws -> Bool) -> Array<ItemType>? {
+        guard let items = try? self.items.filter(predicate) else {
             return nil
         }
         return items
     }
     
-    func containsZombie(_ predicate: (Zombie) throws -> Bool) -> Bool {
+    func contains(_ predicate: (ItemType) throws -> Bool) -> Bool {
         var containsItem = false
         do {
-            containsItem = try self.zombies.contains(where: predicate)
+            containsItem = try self.items.contains(where: predicate)
         }
         catch {
             print("Problem getting item exist")
@@ -51,48 +51,48 @@ class InMemoryDataService: DataServiceProtocol {
         return containsItem
     }
     
-    func insertZombie(_ zombie: Zombie) {
-        self.zombies.append(zombie)
+    func insert(_ item: ItemType) {
+        self.items.append(item)
     }
     
-    func insertZombies(_ zombies: Array<Zombie>) {
-        self.zombies.append(contentsOf: zombies)
+    func insertAll(_ itemsToInsert: Array<ItemType>) {
+        self.items.append(contentsOf: itemsToInsert)
     }
     
-    func deleteZombie(_ zombie: Zombie) {
-        guard let foundIndex = self.zombies.index(where: {$0.id == zombie.id}) else {
+    func delete(_ item: ItemType) {
+        guard let foundIndex = self.items.index(where: {$0.id == item.id}) else {
             return
         }
-        self.zombies.remove(at: foundIndex)
+        self.items.remove(at: foundIndex)
     }
     
-    func deleteZombies(_ predicate: (Zombie) throws -> Bool) {
-        guard let itemsToRemove = try? self.zombies.filter(predicate) else {
+    func deleteAll(_ predicate: (ItemType) throws -> Bool) {
+        guard let itemsToRemove = try? self.items.filter(predicate) else {
             return
         }
         
         for item in itemsToRemove {
-            deleteZombie(item)
+            delete(item)
         }
     }
     
-    func deleteAllZombies() {
-        self.zombies.removeAll()
+    func deleteAll() {
+        self.items.removeAll()
     }
     
-    func updateZombie(_ zombie: Zombie) {
-        guard let foundIndex = self.zombies.index(where: {$0.id == zombie.id}) else {
+    func update(_ item: ItemType) {
+        guard let foundIndex = self.items.index(where: {$0.id == item.id}) else {
             return
         }
-        self.zombies.insert(zombie, at: foundIndex)
+        self.items.insert(item, at: foundIndex)
     }
     
-    func countZombies() -> Int {
-        return self.zombies.count
+    func count() -> Int {
+        return self.items.count
     }
     
-    func countZombies(_ predicate: (Zombie) throws -> Bool) -> Int {
-        guard let itemsToCount = try? self.zombies.filter(predicate) else {
+    func count(_ predicate: (ItemType) throws -> Bool) -> Int {
+        guard let itemsToCount = try? self.items.filter(predicate) else {
             return 0
         }
         

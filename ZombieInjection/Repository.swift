@@ -28,55 +28,61 @@ protocol RepositoryProtocol: class {
 
 class Repository<T: Persistable>: RepositoryProtocol {
     
+    private var dataService: AnyDataService<T>
+    
+    init(dataService: AnyDataService<T>) {
+        self.dataService = dataService
+    }
+    
     func get(_ id: Int) -> T? {
-        fatalError(#function + " must be overridden")
+        return self.dataService.get(id)
     }
     
     func get(_ predicate: (T) throws -> Bool) -> T? {
-        fatalError(#function + " must be overridden")
+        return self.dataService.get(predicate)
     }
     
     func getAll() -> Array<T>? {
-        fatalError(#function + " must be overridden")
+        return self.dataService.getAll()
     }
     
     func getAll(_ predicate: (T) throws -> Bool) -> Array<T>? {
-        fatalError(#function + " must be overridden")
+        return self.getAll(predicate)
     }
     
     func contains(_ predicate: (T) throws -> Bool) -> Bool {
-        fatalError(#function + " must be overridden")
+        return self.dataService.contains(predicate)
     }
     
     func insert(_ object: T) {
-        fatalError(#function + " must be overridden")
+        return self.dataService.insert(object)
     }
     
     func insertAll(_ objects: Array<T>) {
-        fatalError(#function + " must be overridden")
+        return self.dataService.insertAll(objects)
     }
     
     func delete(_ object: T) {
-        fatalError(#function + " must be overridden")
+        return self.dataService.delete(object)
     }
     
     func deleteAll() {
-        fatalError(#function + " must be overridden")
+        return self.dataService.deleteAll()
     }
     
     func deleteAll(_ predicate: (T) throws -> Bool) {
-        fatalError(#function + " must be overridden")
+        return self.dataService.deleteAll(predicate)
     }
     
     func update(_ object: T) {
-        fatalError(#function + " must be overridden")
+        return self.dataService.update(object)
     }
     
     func count() -> Int {
-        fatalError(#function + " must be overridden")
+        return self.dataService.count()
     }
     
     func count(_ predicate: (T) throws -> Bool) -> Int {
-        fatalError(#function + " must be overridden")
+        return self.dataService.count(predicate)
     }
 }
