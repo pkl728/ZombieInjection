@@ -8,15 +8,16 @@
 
 import AlamofireImage
 import Dip
+import RealmSwift
 
 extension DependencyContainer {
     
     static func configure() -> DependencyContainer {
         return DependencyContainer { container in
             container.register(.singleton) { AlamofireImageService(imageDownloader: ImageDownloader()) as ImageDownloadService }
-            // Use an in memory service for testing. You would probably implement a CoreData or SQLite service here.
-            let zombieInMemoryDataService = InMemoryDataService<Zombie>()
-            container.register(.singleton) { ZombieRepository(dataService: AnyDataService<Zombie>(base: zombieInMemoryDataService)) as Repository<Zombie> }
+            // Use InMemoryDataService for testing and RealmDataService for Production.
+            let zombieDataService = RealmDataService<Zombie>()
+            container.register(.singleton) { ZombieRepository(dataService: AnyDataService<Zombie>(base: zombieDataService)) as Repository<Zombie> }
             container.register(.singleton) { ZombieService(zombieRepository: try! container.resolve() as Repository<Zombie>) as ZombieServiceProtocol }
         }
     }
