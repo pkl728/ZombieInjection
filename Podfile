@@ -10,6 +10,7 @@ target 'ZombieInjection' do
   pod 'AlamofireImage', '~> 3.2' 
   pod 'Bond', '~> 6.0' 
   pod 'Dip', '~> 5.0' 
+  pod 'RealmSwift', '~> 2.8'
 
   target 'ZombieInjectionTests' do
     inherit! :search_paths

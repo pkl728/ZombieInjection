@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6B62A8AC6C8FA28135937D472C884F64"
+               BlueprintIdentifier = "18314C9FD51E09EF6647FD2B6585D29D"
                BuildableName = "Pods_ZombieInjection.framework"
                BlueprintName = "Pods-ZombieInjection"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6B62A8AC6C8FA28135937D472C884F64"
+            BlueprintIdentifier = "18314C9FD51E09EF6647FD2B6585D29D"
             BuildableName = "Pods_ZombieInjection.framework"
             BlueprintName = "Pods-ZombieInjection"
             ReferencedContainer = "container:Pods.xcodeproj">
