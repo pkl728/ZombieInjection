@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3014D3541D49211300697BC3 /* ZombieServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3014D3531D49211300697BC3 /* ZombieServiceTests.swift */; };
 		3014D3571D4924A700697BC3 /* ZombieRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3014D3561D4924A700697BC3 /* ZombieRepositoryMock.swift */; };
+		301F99341EF0CDC800933166 /* RealmDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 301F99331EF0CDC800933166 /* RealmDataService.swift */; };
 		304653D81D5A658300EA35C0 /* ZombieListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304653D71D5A658300EA35C0 /* ZombieListViewModelTests.swift */; };
 		304653DA1D5A67E500EA35C0 /* ZombieServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304653D91D5A67E500EA35C0 /* ZombieServiceMock.swift */; };
 		304653DC1D5A6B3700EA35C0 /* ZombieDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304653DB1D5A6B3700EA35C0 /* ZombieDetailViewModelTests.swift */; };
@@ -54,6 +55,7 @@
 		0B3BC80F622338982D9C2B8D /* Pods_ZombieInjection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZombieInjection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3014D3531D49211300697BC3 /* ZombieServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieServiceTests.swift; sourceTree = "<group>"; };
 		3014D3561D4924A700697BC3 /* ZombieRepositoryMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieRepositoryMock.swift; sourceTree = "<group>"; };
+		301F99331EF0CDC800933166 /* RealmDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmDataService.swift; sourceTree = "<group>"; };
 		304653D71D5A658300EA35C0 /* ZombieListViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieListViewModelTests.swift; sourceTree = "<group>"; };
 		304653D91D5A67E500EA35C0 /* ZombieServiceMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieServiceMock.swift; sourceTree = "<group>"; };
 		304653DB1D5A6B3700EA35C0 /* ZombieDetailViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZombieDetailViewModelTests.swift; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 				308A4F7C1D5BAEA800E0B1A9 /* DataService.swift */,
 				30CCFB371D5E0CAD00E9D37E /* InMemoryDataService.swift */,
 				30F34B2B1D5E53C500761154 /* AlamofireImageService.swift */,
+				301F99331EF0CDC800933166 /* RealmDataService.swift */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -493,6 +496,7 @@
 				30CCFB3A1D5E206400E9D37E /* ZombieRepository.swift in Sources */,
 				3072BB6B1D4291A200CD9B26 /* DependencyContainer+Configure.swift in Sources */,
 				30ED34071D2BE8E60065100D /* AppDelegate.swift in Sources */,
+				301F99341EF0CDC800933166 /* RealmDataService.swift in Sources */,
 				30FC9ECD1D395A3C00B3A459 /* Persistable.swift in Sources */,
 				3072BB691D42733000CD9B26 /* ZombieService.swift in Sources */,
 			);
