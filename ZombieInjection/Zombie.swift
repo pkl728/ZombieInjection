@@ -8,18 +8,25 @@
 
 import Bond
 import UIKit
+import Realm
+import RealmSwift
 
-public struct Zombie: Persistable, ImageDownloadable {
+public class Zombie: Object, Persistable, ImageDownloadable {
     
-    var id: Int
-    var name: Observable<String?>
-    var imageURL: URL?
-    var image: Observable<UIImage?>
+    var id: Int = -1
+    var name: Observable<String?> = Observable(nil)
+    var imageUrlAddress: String? = nil
+    var image: Observable<UIImage?> = Observable(nil)
     
-    init(id: Int, name: String, imageURL: URL?) {
+    convenience init(id: Int, name: String, imageUrlAddress: String?) {
+        self.init()
+        
         self.id = id
         self.name = Observable(name)
-        self.image = Observable<UIImage?>(nil)
-        self.imageURL = imageURL
+        self.imageUrlAddress = imageUrlAddress
+    }
+    
+    override public static func primaryKey() -> String? {
+        return "id"
     }
 }
