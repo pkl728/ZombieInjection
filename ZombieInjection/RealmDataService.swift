@@ -14,8 +14,7 @@ class RealmDataService<ItemType: Persistable>: DataServiceProtocol where ItemTyp
     let realm = try! Realm()
     
     func get(_ id: Int) -> ItemType? {
-        let predicate = NSPredicate(format: "id == %@", id)
-        return realm.objects(ItemType.self).filter(predicate).first
+        return realm.object(ofType: ItemType.self, forPrimaryKey: id)
     }
     
     func get(_ predicate: (ItemType) throws -> Bool) -> ItemType? {
