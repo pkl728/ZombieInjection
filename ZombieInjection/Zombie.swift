@@ -14,15 +14,24 @@ import RealmSwift
 public class Zombie: Object, Persistable, ImageDownloadable {
     
     var id: Int = -1
-    var name: Observable<String?> = Observable(nil)
+    var name: String? = nil
     var imageUrlAddress: String? = nil
     var image: Observable<UIImage?> = Observable(nil)
+    
+    var observableName: Observable<String?> {
+        get {
+            return Observable(name)
+        }
+        set {
+            self.name = newValue.value
+        }
+    }
     
     convenience init(id: Int, name: String, imageUrlAddress: String?) {
         self.init()
         
         self.id = id
-        self.name = Observable(name)
+        self.observableName = Observable(name)
         self.imageUrlAddress = imageUrlAddress
     }
     
