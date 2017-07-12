@@ -13,9 +13,9 @@ import RealmSwift
 
 public class Zombie: Object, Persistable, ImageDownloadable {
     
-    var id: Int = -1
-    var name: String? = nil
-    var imageUrlAddress: String? = nil
+    dynamic var id: Int = -1
+    dynamic var name: String? = nil
+    dynamic var imageUrlAddress: String? = nil
     var image: Observable<UIImage?> = Observable(nil)
     
     var observableName: Observable<String?> {
