@@ -9,64 +9,94 @@
 import Foundation
 import RealmSwift
 
-class RealmDataService<ItemType: Persistable>: DataServiceProtocol where ItemType: Object {
+class RealmDataService<ItemType: RealmPersistable>: RealmDataServiceProtocol {
     
     let realm = try! Realm()
     
     func get(_ id: Int) -> ItemType? {
-        return realm.object(ofType: ItemType.self, forPrimaryKey: id)
+        guard let object = realm.object(ofType: ItemType.RealmObject.self, forPrimaryKey: id) else {
+            return nil
+        }
+        return object.originalValue()
     }
     
     func get(_ predicate: (ItemType) throws -> Bool) -> ItemType? {
-        guard let itemToGet = try? realm.objects(ItemType.self).filter(predicate).first else {
+        guard let allItems = try? realm.objects(ItemType.RealmObject.self) else {
             return nil
         }
-        return itemToGet
+        var newItems: Array<ItemType> = []
+        for var item in allItems {
+            newItems.append(item.originalValue())
+        }
+        guard let itemToReturn = try? newItems.filter(predicate).first else {
+            return nil
+        }
+        return itemToReturn
     }
     
     func getAll() -> Array<ItemType>? {
-        let results = Array(realm.objects(ItemType.self))
-        return results
+        var resultsToReturn: Array<ItemType> = []
+        let results: Array<ItemType.RealmObject> = Array(realm.objects(ItemType.RealmObject.self))
+        results.forEach {
+            if let itemToAdd = $0.originalValue() as? ItemType {
+                resultsToReturn.append(itemToAdd)
+            }
+        }
+        return resultsToReturn
     }
     
     func getAll(_ predicate: (ItemType) throws -> Bool) -> Array<ItemType>? {
-        guard let results = try? realm.objects(ItemType.self).filter(predicate) else {
+        guard let results = try? realm.objects(ItemType.RealmObject.self) else {
             return nil
         }
-        return Array(results)
+        var resultsToReturn: Array<ItemType> = []
+        for result in results {
+            resultsToReturn.append(result.originalValue())
+        }
+        return resultsToReturn
     }
     
     func contains(_ predicate: (ItemType) throws -> Bool) -> Bool {
-        guard let isPresent = try? realm.objects(ItemType.self).contains(where: predicate) else {
+        
+        guard let results = try? realm.objects(ItemType.RealmObject.self) else {
             return false
         }
-        return isPresent
+        var resultsToCheck: Array<ItemType> = []
+        for result in results {
+            resultsToCheck.append(result.originalValue())
+        }
+        let isPresent = try? resultsToCheck.contains(where: predicate)
+        return isPresent ?? false
     }
     
     func insert(_ item: ItemType) {
         try? realm.write {
-            realm.add(item)
+            realm.add(item.realmObject)
         }
     }
     
     func insertAll(_ itemsToInsert: Array<ItemType>) {
         try? realm.write {
-            realm.add(itemsToInsert)
+            var realmItemsToInsert: Array<Object> = []
+            itemsToInsert.forEach {
+                realmItemsToInsert.append($0.realmObject)
+            }
+            realm.add(realmItemsToInsert)
         }
     }
     
     func delete(_ item: ItemType) {
         try? realm.write {
-            realm.delete(item)
+            realm.delete(item.realmObject)
         }
     }
     
     func deleteAll(_ predicate: (ItemType) throws -> Bool) {
-        guard let itemsToDelete = try? realm.objects(ItemType.self).filter(predicate) else {
+        guard let items = try? realm.objects(ItemType.RealmObject.self) else {
             return
         }
         try? realm.write {
-            realm.delete(itemsToDelete)
+            realm.delete(items)
         }
     }
     
@@ -78,18 +108,23 @@ class RealmDataService<ItemType: Persistable>: DataServiceProtocol where ItemTyp
     
     func update(_ item: ItemType) {
         try? realm.write {
-            realm.add(item, update: true)
+            realm.add(item.realmObject, update: true)
         }
     }
     
     func count() -> Int {
-        return realm.objects(ItemType.self).count
+        return realm.objects(ItemType.RealmObject.self).count
     }
     
     func count(_ predicate: (ItemType) throws -> Bool) -> Int {
-        guard let count = try? realm.objects(ItemType.self).filter(predicate).count else {
+        guard let items = try? realm.objects(ItemType.RealmObject.self) else {
             return 0
         }
-        return count
+        var itemsToCount: Array<ItemType> = []
+        for item in items {
+            itemsToCount.append(item.originalValue())
+        }
+        let count = try? itemsToCount.filter(predicate).count
+        return count ?? 0
     }
 }

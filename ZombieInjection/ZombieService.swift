@@ -15,6 +15,7 @@ protocol ZombieServiceProtocol {
 }
 
 struct ZombieService: ZombieServiceProtocol {
+    
     private var zombieRepository: Repository<Zombie>
     
     init(zombieRepository: Repository<Zombie>) {

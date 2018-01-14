@@ -34,7 +34,7 @@ public final class DependencyContainer {
    
    - seealso: `DependencyTagConvertible`
    */
-  public enum Tag: Equatable {
+  public enum Tag {
     case String(StringLiteralType)
     case Int(IntegerLiteralType)
   }
@@ -99,19 +99,11 @@ public final class DependencyContainer {
     }
   }
 
-  #if swift(>=3.0)
   func threadSafe<T>(_ closure: () throws -> T) rethrows -> T {
     lock.lock()
     defer { lock.unlock() }
     return try closure()
   }
-  #else
-  func threadSafe<T>(@noescape closure: () throws -> T) rethrows -> T {
-    lock.lock()
-    defer { lock.unlock() }
-    return try closure()
-  }
-  #endif
   
 }
 
@@ -175,12 +167,15 @@ extension DependencyContainer {
     /// The label of the property where resolved instance will be auto-injected.
     private(set) public var injectedInProperty: String?
     
+    let inCollaboration: Bool
+    
     var logErrors: Bool = true
     
-    init(key: DefinitionKey, injectedInType: Any.Type?, injectedInProperty: String?) {
+    init(key: DefinitionKey, injectedInType: Any.Type?, injectedInProperty: String?, inCollaboration: Bool) {
       self.key = key
       self.injectedInType = injectedInType
       self.injectedInProperty = injectedInProperty
+      self.inCollaboration = inCollaboration
     }
     
     public var debugDescription: String {
@@ -204,7 +199,7 @@ extension DependencyContainer {
 
   /// Pushes new context created with provided values and calls block. When block returns previous context is restored.
   /// When popped to initial (root) context will release all references to resolved instances and call `Resolvable` callbacks.
-  func inContext<T>(key aKey: DefinitionKey, injectedInType: Any.Type?, injectedInProperty: String? = nil, logErrors: Bool! = nil, block: () throws -> T) rethrows -> T {
+  func inContext<T>(key aKey: DefinitionKey, injectedInType: Any.Type?, injectedInProperty: String? = nil, inCollaboration: Bool = false, container: DependencyContainer? = nil, logErrors: Bool! = nil, block: () throws -> T) rethrows -> T {
     let key = aKey
     return try threadSafe {
       let currentContext = self.context
@@ -215,6 +210,10 @@ extension DependencyContainer {
         //clean instances pool if it is owned not by other container
         if context == nil {
           resolvedInstances.resolvedInstances.removeAll()
+          for (key, instance) in resolvedInstances.sharedWeakSingletons {
+            if resolvedInstances.sharedWeakSingletons[key] is WeakBoxType { continue }
+            resolvedInstances.sharedWeakSingletons[key] = WeakBox(instance)
+          }
           for (key, instance) in resolvedInstances.weakSingletons {
             if resolvedInstances.weakSingletons[key] is WeakBoxType { continue }
             resolvedInstances.weakSingletons[key] = WeakBox(instance)
@@ -230,7 +229,8 @@ extension DependencyContainer {
       context = Context(
         key: key,
         injectedInType: injectedInType,
-        injectedInProperty: injectedInProperty
+        injectedInProperty: injectedInProperty,
+        inCollaboration: inCollaboration
       )
       context.logErrors = logErrors ?? currentContext?.logErrors ?? true
       
@@ -265,8 +265,19 @@ extension DependencyContainer {
   public func collaborate(with containers: [DependencyContainer]) {
     _collaborators += containers
     for container in containers {
-      container.resolvedInstances.singletonsBox = self.resolvedInstances.singletonsBox
-      container.resolvedInstances.weakSingletonsBox = self.resolvedInstances.weakSingletonsBox
+      container._collaborators += [self]
+      container.resolvedInstances.sharedSingletonsBox = self.resolvedInstances.sharedSingletonsBox
+      container.resolvedInstances.sharedWeakSingletonsBox = self.resolvedInstances.sharedWeakSingletonsBox
+      updateCollaborationReferences(between: container, and: self)
+    }
+  }
+  
+  private func updateCollaborationReferences(between container: DependencyContainer, and collaborator: DependencyContainer) {
+    for container in container._collaborators {
+      guard container.resolvedInstances.sharedSingletonsBox !== collaborator.resolvedInstances.sharedSingletonsBox else { continue }
+      container.resolvedInstances.sharedSingletonsBox = collaborator.resolvedInstances.sharedSingletonsBox
+      container.resolvedInstances.sharedWeakSingletonsBox = collaborator.resolvedInstances.sharedWeakSingletonsBox
+      updateCollaborationReferences(between: container, and: collaborator)
     }
   }
   
@@ -278,11 +289,7 @@ extension DependencyContainer {
       //it means that it has been already called to resolve this type,
       //so there is probably a cercular reference between containers.
       //To break it skip this container
-      #if swift(>=3.0)
       if let context = collaborator.context, context.resolvingType == key.type && context.tag == key.tag { continue }
-      #else
-        if let context = collaborator.context where context.resolvingType == key.type && context.tag == key.tag { continue }
-      #endif
       
       do {
         //Pass current container's instances pool to collect instances resolved by collaborator
@@ -292,11 +299,23 @@ extension DependencyContainer {
         let context = collaborator.context
         collaborator.context = self.context
         defer {
-          collaborator.resolvedInstances = resolvedInstances
           collaborator.context = context
+          collaborator.resolvedInstances = resolvedInstances
+          
+          for (key, resolvedSingleton) in self.resolvedInstances.singletons {
+            collaborator.resolvedInstances.singletons[aKey] = resolvedSingleton
+          }
+          for (_, resolvedSingleton) in self.resolvedInstances.weakSingletons {
+            guard collaborator.definition(matching: aKey) != nil else { continue }
+            collaborator.resolvedInstances.weakSingletons[aKey] = WeakBox(resolvedSingleton)
+          }
+          for (_, resolved) in self.resolvedInstances.resolvedInstances {
+            guard collaborator.definition(matching: aKey) != nil else { continue }
+            collaborator.resolvedInstances.resolvedInstances[aKey] = resolved
+          }
         }
         
-        let resolved = try collaborator.inContext(key:key, injectedInType: self.context.injectedInType, injectedInProperty: self.context.injectedInProperty, logErrors: false) {
+        let resolved = try collaborator.inContext(key:key, injectedInType: self.context.injectedInType, injectedInProperty: self.context.injectedInProperty, inCollaboration: true, logErrors: false) {
           try collaborator._resolve(key: key, builder: builder)
         }
 
@@ -313,7 +332,6 @@ extension DependencyContainer {
 
 extension DependencyContainer {
   
-  #if swift(>=3.0)
   /**
    Removes definition registered in the container.
    
@@ -324,18 +342,6 @@ extension DependencyContainer {
   public func remove<T, U>(_ definition: Definition<T, U>, tag: DependencyTagConvertible? = nil) {
     _remove(definition: definition, tag: tag)
   }
-  #else
-  /**
-   Removes definition registered in the container.
-   
-   - parameters:
-      - tag: The tag used to register definition.
-      - definition: The definition to remove
-   */
-  public func remove<T, U>(definition: Definition<T, U>, tag: DependencyTagConvertible? = nil) {
-  _remove(definition: definition, tag: tag)
-  }
-  #endif
   
   func _remove<T, U>(definition aDefinition: Definition<T, U>, tag: DependencyTagConvertible? = nil) {
     let key = DefinitionKey(type: T.self, typeOfArguments: U.self, tag: tag?.dependencyTag)
@@ -350,6 +356,8 @@ extension DependencyContainer {
       definitions[key] = nil
       resolvedInstances.singletons[key] = nil
       resolvedInstances.weakSingletons[key] = nil
+      resolvedInstances.sharedSingletons[key] = nil
+      resolvedInstances.sharedWeakSingletons[key] = nil
     }
   }
 
@@ -362,6 +370,8 @@ extension DependencyContainer {
       definitions.removeAll()
       resolvedInstances.singletons.removeAll()
       resolvedInstances.weakSingletons.removeAll()
+      resolvedInstances.sharedSingletons.removeAll()
+      resolvedInstances.sharedWeakSingletons.removeAll()
       bootstrapped = false
     }
   }
@@ -372,7 +382,6 @@ extension DependencyContainer {
 
 extension DependencyContainer {
   
-  #if swift(>=3.0)
   /**
    Validates container configuration trying to resolve each registered definition one by one.
    If definition fails to be resolved without arguments will search provided arguments array
@@ -385,20 +394,6 @@ extension DependencyContainer {
   public func validate(_ arguments: Any...) throws {
     try _validate(arguments: arguments)
   }
-  #else
-  /**
-   Validates container configuration trying to resolve each registered definition one by one.
-   If definition fails to be resolved without arguments will search provided arguments array
-   for arguments matched by type and try to resolve this definition using these arguments.
-   If there are no matching arguments will rethrow original error.
-   
-   - parameter arguments: Set of arguments to use to resolve registered definitions.
-                          Use a tuple for registered factories that accept several runtime arguments.
-   */
-  public func validate(arguments: Any...) throws {
-    try _validate(arguments: arguments)
-  }
-  #endif
   
   func _validate(arguments _arguments: [Any]) throws {
     let arguments = _arguments
@@ -406,11 +401,7 @@ extension DependencyContainer {
       do {
         //try to resolve key using provided arguments
         for argumentsSet in arguments {
-          #if swift(>=3.0)
-            guard type(of: argumentsSet) == key.typeOfArguments else { continue }
-          #else
-            guard argumentsSet.dynamicType == key.typeOfArguments else { continue }
-          #endif
+          guard type(of: argumentsSet) == key.typeOfArguments else { continue }
           do {
             let _ = try inContext(key:key, injectedInType: nil) {
               try self._resolve(key: key, builder: { definition throws -> Any in
@@ -510,13 +501,17 @@ extension DependencyContainer.Tag: ExpressibleByIntegerLiteral {
   
 }
 
-public func ==(lhs: DependencyContainer.Tag, rhs: DependencyContainer.Tag) -> Bool {
-  switch (lhs, rhs) {
-  case let (.String(lhsString), .String(rhsString)):
-    return lhsString == rhsString
-  case let (.Int(lhsInt), .Int(rhsInt)):
-    return lhsInt == rhsInt
-  default:
-    return false
+extension DependencyContainer.Tag: Equatable {
+
+  public static func ==(lhs: DependencyContainer.Tag, rhs: DependencyContainer.Tag) -> Bool {
+    switch (lhs, rhs) {
+    case let (.String(lhsString), .String(rhsString)):
+      return lhsString == rhsString
+    case let (.Int(lhsInt), .Int(rhsInt)):
+      return lhsInt == rhsInt
+    default:
+      return false
+    }
   }
+
 }

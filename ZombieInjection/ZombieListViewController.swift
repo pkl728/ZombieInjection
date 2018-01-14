@@ -43,7 +43,7 @@ class ZombieListViewController: UIViewController, UITableViewDelegate {
                                                                    zombieService: viewModel.zombieService,
                                                                    goBackCallBack: {
                                                                     var _ = detailViewController.navigationController?.popViewController(animated: true)
-                                                                    self.zombieTableView.reloadData()
+                                                                    //self.zombieTableView.reloadData()
             }
             )
         }
@@ -58,7 +58,7 @@ class ZombieListViewController: UIViewController, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: ZombieCell.cellIdentifier, for: indexPath) as! ZombieCell
             let zombie = dataSource[(indexPath as NSIndexPath).row]
             self.viewModel.imageDownloadService.requestImage(forItem: zombie)
-            zombie.observableName.bind(to: cell.zombieNameLabel.reactive.text).dispose(in: cell.reactive.bag)
+            zombie.name.bind(to: cell.zombieNameLabel.reactive.text).dispose(in: cell.reactive.bag)
             zombie.image.bind(to: cell.zombieImageView.reactive.image).dispose(in: cell.reactive.bag)
             return cell
         }.dispose(in: reactive.bag)

@@ -26,6 +26,24 @@ protocol DataServiceProtocol: class {
     func update(_ item: ItemType) -> Void
 }
 
+protocol RealmDataServiceProtocol: class {
+    associatedtype ItemType: RealmPersistable
+    
+    func get(_ id: Int) -> ItemType?
+    func get(_ predicate: (ItemType) throws -> Bool) -> ItemType?
+    func getAll() -> Array<ItemType>?
+    func getAll(_ predicate: (ItemType) throws -> Bool) -> Array<ItemType>?
+    func contains(_ predicate: (ItemType) throws -> Bool) -> Bool
+    func insert(_ item: ItemType) -> Void
+    func insertAll(_ itemsToInsert: Array<ItemType>) -> Void
+    func delete(_ item: ItemType) -> Void
+    func deleteAll(_ predicate: (ItemType) throws -> Bool) -> Void
+    func deleteAll() -> Void
+    func count() -> Int
+    func count(_ predicate: (ItemType) throws -> Bool) -> Int
+    func update(_ item: ItemType) -> Void
+}
+
 class AnyDataService<ItemType: Persistable>: DataServiceProtocol {
     
     private let box: _AnyDataServiceBoxBase<ItemType>

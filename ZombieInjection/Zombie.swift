@@ -11,31 +11,55 @@ import UIKit
 import Realm
 import RealmSwift
 
-public class Zombie: Object, Persistable, ImageDownloadable {
+public class Zombie: ImageDownloadable, RealmPersistable {
+    typealias RealmObject = ZombieRealmObject
     
-    dynamic var id: Int = -1
-    dynamic var name: String? = nil
-    dynamic var imageUrlAddress: String? = nil
+    var id: Int = -1
+    var name: Observable<String?>
+    var imageUrlAddress: String?
     var image: Observable<UIImage?> = Observable(nil)
     
-    var observableName: Observable<String?> {
-        get {
-            return Observable(name)
-        }
-        set {
-            self.name = newValue.value
-        }
-    }
+    var realmObject: RealmObject
     
-    convenience init(id: Int, name: String, imageUrlAddress: String?) {
+    static var objectType: RealmObject.Type { return RealmObject.self }
+    
+    init(id: Int, name: String?, imageUrlAddress: String?) {
+        self.id = id
+        self.name = Observable(name)
+        self.imageUrlAddress = imageUrlAddress 
+        self.realmObject = ZombieRealmObject(id: self.id, name: self.name.value, imageUrlAddress: self.imageUrlAddress)
+    }
+}
+
+protocol RealmPersistable: Persistable {
+    associatedtype RealmObject: Object, Persistable, RealmValueProtocol
+    
+    var realmObject: RealmObject { get set }
+}
+
+protocol RealmValueProtocol {
+    func originalValue() -> RealmPersistable
+}
+
+public class ZombieRealmObject: Object, Persistable, RealmValueProtocol {
+    
+    @objc dynamic var id: Int = -1
+    @objc dynamic var name: String? = nil
+    @objc dynamic var imageUrlAddress: String? = nil
+    
+    convenience init(id: Int, name: String?, imageUrlAddress: String?) {
         self.init()
         
         self.id = id
-        self.observableName = Observable(name)
+        self.name = name
         self.imageUrlAddress = imageUrlAddress
     }
     
     override public static func primaryKey() -> String? {
         return "id"
+    }
+    
+    func originalValue() -> RealmPersistable {
+        return Zombie(id: self.id, name: self.name, imageUrlAddress: self.imageUrlAddress)
     }
 }
