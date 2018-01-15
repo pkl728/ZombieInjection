@@ -43,7 +43,6 @@ class ZombieListViewController: UIViewController, UITableViewDelegate {
                                                                    zombieService: viewModel.zombieService,
                                                                    goBackCallBack: {
                                                                     var _ = detailViewController.navigationController?.popViewController(animated: true)
-                                                                    //self.zombieTableView.reloadData()
             }
             )
         }

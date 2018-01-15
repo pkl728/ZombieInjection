@@ -16,9 +16,9 @@ protocol ZombieServiceProtocol {
 
 struct ZombieService: ZombieServiceProtocol {
     
-    private var zombieRepository: Repository<Zombie>
+    private var zombieRepository: ZombieRepositoryProtocol
     
-    init(zombieRepository: Repository<Zombie>) {
+    init(zombieRepository: ZombieRepositoryProtocol) {
         self.zombieRepository = zombieRepository
     }
     

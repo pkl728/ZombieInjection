@@ -8,15 +8,15 @@
 
 import Foundation
 
-class InMemoryDataService<ItemType>: DataServiceProtocol where ItemType: Persistable {
+class InMemoryZombieDataService: ZombieDataServiceProtocol {
     
-    private var items = Array<ItemType>()
+    private var items = Array<Zombie>()
     
-    func get(_ id: Int) -> ItemType? {
+    func get(_ id: Int) -> Zombie? {
         return get({$0.id == id})
     }
     
-    func get(_ predicate: (ItemType) throws -> Bool) -> ItemType? {
+    func get(_ predicate: (Zombie) throws -> Bool) -> Zombie? {
         do {
             guard let foundIndex = try self.items.index(where: predicate) else {
                 return nil
@@ -29,18 +29,18 @@ class InMemoryDataService<ItemType>: DataServiceProtocol where ItemType: Persist
         return nil
     }
     
-    func getAll() -> Array<ItemType>? {
+    func getAll() -> Array<Zombie>? {
         return self.items
     }
     
-    func getAll(_ predicate: (ItemType) throws -> Bool) -> Array<ItemType>? {
+    func getAll(_ predicate: (Zombie) throws -> Bool) -> Array<Zombie>? {
         guard let items = try? self.items.filter(predicate) else {
             return nil
         }
         return items
     }
     
-    func contains(_ predicate: (ItemType) throws -> Bool) -> Bool {
+    func contains(_ predicate: (Zombie) throws -> Bool) -> Bool {
         var containsItem = false
         do {
             containsItem = try self.items.contains(where: predicate)
@@ -51,22 +51,22 @@ class InMemoryDataService<ItemType>: DataServiceProtocol where ItemType: Persist
         return containsItem
     }
     
-    func insert(_ item: ItemType) {
+    func insert(_ item: Zombie) {
         self.items.append(item)
     }
     
-    func insertAll(_ itemsToInsert: Array<ItemType>) {
+    func insertAll(_ itemsToInsert: Array<Zombie>) {
         self.items.append(contentsOf: itemsToInsert)
     }
     
-    func delete(_ item: ItemType) {
+    func delete(_ item: Zombie) {
         guard let foundIndex = self.items.index(where: {$0.id == item.id}) else {
             return
         }
         self.items.remove(at: foundIndex)
     }
     
-    func deleteAll(_ predicate: (ItemType) throws -> Bool) {
+    func deleteAll(_ predicate: (Zombie) throws -> Bool) {
         guard let itemsToRemove = try? self.items.filter(predicate) else {
             return
         }
@@ -80,7 +80,7 @@ class InMemoryDataService<ItemType>: DataServiceProtocol where ItemType: Persist
         self.items.removeAll()
     }
     
-    func update(_ item: ItemType) {
+    func update(_ item: Zombie) {
         guard let foundIndex = self.items.index(where: {$0.id == item.id}) else {
             return
         }
@@ -91,7 +91,7 @@ class InMemoryDataService<ItemType>: DataServiceProtocol where ItemType: Persist
         return self.items.count
     }
     
-    func count(_ predicate: (ItemType) throws -> Bool) -> Int {
+    func count(_ predicate: (Zombie) throws -> Bool) -> Int {
         guard let itemsToCount = try? self.items.filter(predicate) else {
             return 0
         }

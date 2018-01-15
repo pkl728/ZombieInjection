@@ -16,9 +16,10 @@ extension DependencyContainer {
         return DependencyContainer { container in
             container.register(.singleton) { AlamofireImageService(imageDownloader: ImageDownloader()) as ImageDownloadService }
             // Use InMemoryDataService for testing and RealmDataService for Production.
-            let zombieDataService = RealmDataService<Zombie>()
-            container.register(.singleton) { ZombieRepository(dataService: AnyDataService<Zombie>(base: zombieDataService)) as Repository<Zombie> }
-            container.register(.singleton) { ZombieService(zombieRepository: try! container.resolve() as Repository<Zombie>) as ZombieServiceProtocol }
+            // let zombieDataService = InMemoryZombieDataService()
+            let zombieDataService = ZombieRealmDataService()
+            container.register(.singleton) { ZombieRepository(zombieDataService: zombieDataService) as ZombieRepository }
+            container.register(.singleton) { ZombieService(zombieRepository: try! container.resolve() as ZombieRepository) as ZombieServiceProtocol }
         }
     }
 }

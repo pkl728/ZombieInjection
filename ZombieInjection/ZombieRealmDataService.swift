@@ -1,5 +1,5 @@
 //
-//  RealmDataService.swift
+//  ZombieRealmDataService.swift
 //  ZombieInjection
 //
 //  Created by Patrick Lind on 6/13/17.
@@ -9,22 +9,22 @@
 import Foundation
 import RealmSwift
 
-class RealmDataService<ItemType: RealmPersistable>: RealmDataServiceProtocol {
+class ZombieRealmDataService: ZombieDataServiceProtocol {
     
     let realm = try! Realm()
     
-    func get(_ id: Int) -> ItemType? {
-        guard let object = realm.object(ofType: ItemType.RealmObject.self, forPrimaryKey: id) else {
+    func get(_ id: Int) -> Zombie? {
+        guard let object = realm.object(ofType: Zombie.RealmObject.self, forPrimaryKey: id) else {
             return nil
         }
         return object.originalValue()
     }
     
-    func get(_ predicate: (ItemType) throws -> Bool) -> ItemType? {
-        guard let allItems = try? realm.objects(ItemType.RealmObject.self) else {
+    func get(_ predicate: (Zombie) throws -> Bool) -> Zombie? {
+        guard let allItems = try? realm.objects(Zombie.RealmObject.self) else {
             return nil
         }
-        var newItems: Array<ItemType> = []
+        var newItems: Array<Zombie> = []
         for var item in allItems {
             newItems.append(item.originalValue())
         }
@@ -34,34 +34,32 @@ class RealmDataService<ItemType: RealmPersistable>: RealmDataServiceProtocol {
         return itemToReturn
     }
     
-    func getAll() -> Array<ItemType>? {
-        var resultsToReturn: Array<ItemType> = []
-        let results: Array<ItemType.RealmObject> = Array(realm.objects(ItemType.RealmObject.self))
+    func getAll() -> Array<Zombie>? {
+        var resultsToReturn: Array<Zombie> = []
+        let results: Array<Zombie.RealmObject> = Array(realm.objects(Zombie.RealmObject.self))
         results.forEach {
-            if let itemToAdd = $0.originalValue() as? ItemType {
-                resultsToReturn.append(itemToAdd)
-            }
+            resultsToReturn.append($0.originalValue())
         }
         return resultsToReturn
     }
     
-    func getAll(_ predicate: (ItemType) throws -> Bool) -> Array<ItemType>? {
-        guard let results = try? realm.objects(ItemType.RealmObject.self) else {
+    func getAll(_ predicate: (Zombie) throws -> Bool) -> Array<Zombie>? {
+        guard let results = try? realm.objects(Zombie.RealmObject.self) else {
             return nil
         }
-        var resultsToReturn: Array<ItemType> = []
+        var resultsToReturn: Array<Zombie> = []
         for result in results {
             resultsToReturn.append(result.originalValue())
         }
         return resultsToReturn
     }
     
-    func contains(_ predicate: (ItemType) throws -> Bool) -> Bool {
+    func contains(_ predicate: (Zombie) throws -> Bool) -> Bool {
         
-        guard let results = try? realm.objects(ItemType.RealmObject.self) else {
+        guard let results = try? realm.objects(Zombie.RealmObject.self) else {
             return false
         }
-        var resultsToCheck: Array<ItemType> = []
+        var resultsToCheck: Array<Zombie> = []
         for result in results {
             resultsToCheck.append(result.originalValue())
         }
@@ -69,13 +67,13 @@ class RealmDataService<ItemType: RealmPersistable>: RealmDataServiceProtocol {
         return isPresent ?? false
     }
     
-    func insert(_ item: ItemType) {
+    func insert(_ item: Zombie) {
         try? realm.write {
             realm.add(item.realmObject)
         }
     }
     
-    func insertAll(_ itemsToInsert: Array<ItemType>) {
+    func insertAll(_ itemsToInsert: Array<Zombie>) {
         try? realm.write {
             var realmItemsToInsert: Array<Object> = []
             itemsToInsert.forEach {
@@ -85,14 +83,14 @@ class RealmDataService<ItemType: RealmPersistable>: RealmDataServiceProtocol {
         }
     }
     
-    func delete(_ item: ItemType) {
+    func delete(_ item: Zombie) {
         try? realm.write {
             realm.delete(item.realmObject)
         }
     }
     
-    func deleteAll(_ predicate: (ItemType) throws -> Bool) {
-        guard let items = try? realm.objects(ItemType.RealmObject.self) else {
+    func deleteAll(_ predicate: (Zombie) throws -> Bool) {
+        guard let items = try? realm.objects(Zombie.RealmObject.self) else {
             return
         }
         try? realm.write {
@@ -106,21 +104,21 @@ class RealmDataService<ItemType: RealmPersistable>: RealmDataServiceProtocol {
         }
     }
     
-    func update(_ item: ItemType) {
+    func update(_ item: Zombie) {
         try? realm.write {
             realm.add(item.realmObject, update: true)
         }
     }
     
     func count() -> Int {
-        return realm.objects(ItemType.RealmObject.self).count
+        return realm.objects(Zombie.RealmObject.self).count
     }
     
-    func count(_ predicate: (ItemType) throws -> Bool) -> Int {
-        guard let items = try? realm.objects(ItemType.RealmObject.self) else {
+    func count(_ predicate: (Zombie) throws -> Bool) -> Int {
+        guard let items = try? realm.objects(Zombie.RealmObject.self) else {
             return 0
         }
-        var itemsToCount: Array<ItemType> = []
+        var itemsToCount: Array<Zombie> = []
         for item in items {
             itemsToCount.append(item.originalValue())
         }

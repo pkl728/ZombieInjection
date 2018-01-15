@@ -28,7 +28,7 @@ class ZombieDetailViewController: UIViewController {
         super.viewDidLoad()
         
         self.viewModel.zombie.image.bind(to: zombieImageView.reactive.image).dispose(in: reactive.bag)
-        self.viewModel.zombie.name.bind(to: self.zombieNameTextField.reactive.text).dispose(in: reactive.bag)
+        self.viewModel.zombie.name.bidirectionalBind(to: self.zombieNameTextField.reactive.text).dispose(in: reactive.bag)
     }
     
     // Need to get rid of the view model to prevent a memory leak.

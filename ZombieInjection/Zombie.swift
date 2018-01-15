@@ -19,9 +19,7 @@ public class Zombie: ImageDownloadable, RealmPersistable {
     var imageUrlAddress: String?
     var image: Observable<UIImage?> = Observable(nil)
     
-    var realmObject: RealmObject
-    
-    static var objectType: RealmObject.Type { return RealmObject.self }
+    var realmObject: ZombieRealmObject
     
     init(id: Int, name: String?, imageUrlAddress: String?) {
         self.id = id
@@ -32,16 +30,12 @@ public class Zombie: ImageDownloadable, RealmPersistable {
 }
 
 protocol RealmPersistable: Persistable {
-    associatedtype RealmObject: Object, Persistable, RealmValueProtocol
+    associatedtype RealmObject: Object, Persistable
     
     var realmObject: RealmObject { get set }
 }
 
-protocol RealmValueProtocol {
-    func originalValue() -> RealmPersistable
-}
-
-public class ZombieRealmObject: Object, Persistable, RealmValueProtocol {
+public class ZombieRealmObject: Object, Persistable {
     
     @objc dynamic var id: Int = -1
     @objc dynamic var name: String? = nil
@@ -59,7 +53,7 @@ public class ZombieRealmObject: Object, Persistable, RealmValueProtocol {
         return "id"
     }
     
-    func originalValue() -> RealmPersistable {
+    func originalValue() -> Zombie {
         return Zombie(id: self.id, name: self.name, imageUrlAddress: self.imageUrlAddress)
     }
 }
