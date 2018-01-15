@@ -12,7 +12,7 @@ import Bond
 @testable import ZombieInjection
 class ZombieServiceTests: XCTestCase {
 
-    private var zombieRepository: Repository<Zombie>!
+    private var zombieRepository: ZombieRepositoryProtocol!
     private var zombieService: ZombieServiceProtocol!
     
     override func setUp() {
@@ -71,7 +71,7 @@ class ZombieServiceTests: XCTestCase {
     
     func testUpdateWithNonExistentZombieDoesNothing() {
         // Arrange
-        let badZombie = Zombie(id: -1, name: "Bad", imageURL: nil)
+        let badZombie = Zombie(id: -1, name: "Bad", imageUrlAddress: nil)
         
         // Act
         self.zombieService.update(badZombie)

@@ -10,10 +10,10 @@ import Foundation
 
 @testable import ZombieInjection
 class ZombieServiceMock: ZombieServiceProtocol {
-    private var zombieRepository: ZombieRepositoryMock
+    private var zombieRepository: ZombieRepositoryProtocol
     
-    init(zombieRepository: Repository<Zombie>) {
-        self.zombieRepository = ZombieRepositoryMock()
+    init(zombieRepository: ZombieRepositoryProtocol) {
+        self.zombieRepository = zombieRepository
     }
     
     func fetchZombies() {
@@ -30,7 +30,7 @@ class ZombieServiceMock: ZombieServiceProtocol {
     
     private func createFakeZombies() {
         for index in 1...100 {
-            let zombie = Zombie(id: index, name: "Zombie \(index)", imageURL: URL(string: "https://test.com"))
+            let zombie = Zombie(id: index, name: "Zombie \(index)", imageUrlAddress: "https://test.com")
             self.zombieRepository.insert(zombie)
         }
     }

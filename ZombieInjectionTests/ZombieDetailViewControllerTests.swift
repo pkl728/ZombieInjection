@@ -45,7 +45,7 @@ class ZombieDetailViewControllerTests: XCTestCase {
     
     func testZombieDetailIsShown() {
         // Arrange
-        let detailZombie = Zombie(id: 0, name: "Test", imageURL: nil)
+        let detailZombie = Zombie(id: 0, name: "Test", imageUrlAddress: nil)
         let viewModel = ZombieDetailViewModel(zombie: detailZombie, zombieService: ZombieServiceMock(zombieRepository: ZombieRepositoryMock()), goBackCallBack: { })
         detailViewController.viewModel = viewModel
         _ = detailViewController.view
@@ -60,7 +60,7 @@ class ZombieDetailViewControllerTests: XCTestCase {
     func testSaveButtonExecutes() {
         // Arrange
         var goBackCalled = false
-        let detailZombie = Zombie(id: 0, name: "Test", imageURL: nil)
+        let detailZombie = Zombie(id: 0, name: "Test", imageUrlAddress: nil)
         let viewModel = ZombieDetailViewModel(zombie: detailZombie, zombieService: ZombieServiceMock(zombieRepository: ZombieRepositoryMock()), goBackCallBack: { goBackCalled = true })
         detailViewController.viewModel = viewModel
 

@@ -11,7 +11,7 @@ import XCTest
 @testable import ZombieInjection
 class ZombieListViewModelTests: XCTestCase {
     
-    private var zombieRepository: Repository<Zombie>!
+    private var zombieRepository: ZombieRepositoryProtocol!
     private var zombieService: ZombieServiceProtocol!
     private var imageService: ImageDownloadService!
     private var zombieListViewModel: ZombieListViewModel!
