@@ -22,11 +22,14 @@ struct AlamofireImageService: ImageDownloadService {
     }
     
     internal func requestImage(forItem item: ImageDownloadable) {
-        guard let imageURL = item.imageURL else {
+        guard let imageUrlAddress = item.imageUrlAddress else {
             return
         }
         
-        let urlRequest = URLRequest(url: imageURL)
+        guard let imageUrl = URL(string: imageUrlAddress) else {
+            return
+        }
+        let urlRequest = URLRequest(url: imageUrl)
         self.imageDownloader.download(urlRequest) { response in
             if response.result.isFailure {
                 print("Problem downloading")

@@ -8,18 +8,52 @@
 
 import Bond
 import UIKit
+import Realm
+import RealmSwift
 
-public struct Zombie: Persistable, ImageDownloadable {
+public class Zombie: ImageDownloadable, RealmPersistable {
+    typealias RealmObject = ZombieRealmObject
     
-    var id: Int
+    var id: Int = -1
     var name: Observable<String?>
-    var imageURL: URL?
-    var image: Observable<UIImage?>
+    var imageUrlAddress: String?
+    var image: Observable<UIImage?> = Observable(nil)
     
-    init(id: Int, name: String, imageURL: URL?) {
+    var realmObject: ZombieRealmObject
+    
+    init(id: Int, name: String?, imageUrlAddress: String?) {
         self.id = id
         self.name = Observable(name)
-        self.image = Observable<UIImage?>(nil)
-        self.imageURL = imageURL
+        self.imageUrlAddress = imageUrlAddress 
+        self.realmObject = ZombieRealmObject(id: self.id, name: self.name.value, imageUrlAddress: self.imageUrlAddress)
+    }
+}
+
+protocol RealmPersistable: Persistable {
+    associatedtype RealmObject: Object, Persistable
+    
+    var realmObject: RealmObject { get set }
+}
+
+public class ZombieRealmObject: Object, Persistable {
+    
+    @objc dynamic var id: Int = -1
+    @objc dynamic var name: String? = nil
+    @objc dynamic var imageUrlAddress: String? = nil
+    
+    convenience init(id: Int, name: String?, imageUrlAddress: String?) {
+        self.init()
+        
+        self.id = id
+        self.name = name
+        self.imageUrlAddress = imageUrlAddress
+    }
+    
+    override public static func primaryKey() -> String? {
+        return "id"
+    }
+    
+    func originalValue() -> Zombie {
+        return Zombie(id: self.id, name: self.name, imageUrlAddress: self.imageUrlAddress)
     }
 }

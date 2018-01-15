@@ -6,15 +6,16 @@ target 'ZombieInjection' do
   use_frameworks!
 
   # Pods for ZombieInjection
-  pod 'Alamofire', '~> 4.4'
-  pod 'AlamofireImage', '~> 3.2' 
-  pod 'Bond', '~> 6.0' 
-  pod 'Dip', '~> 5.0' 
+  pod 'Alamofire', '~> 4.5'
+  pod 'AlamofireImage', '~> 3.3' 
+  pod 'Bond', '~> 6.4' 
+  pod 'Dip', '~> 6.0' 
+  pod 'RealmSwift', '~> 2.10'
 
   target 'ZombieInjectionTests' do
     inherit! :search_paths
     # Pods for testing
-    pod 'Bond', '~> 6.0'
+    pod 'Bond', '~> 6.4'
   end
 
 end

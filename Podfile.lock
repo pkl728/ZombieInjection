@@ -1,28 +1,36 @@
 PODS:
-  - Alamofire (4.4.0)
-  - AlamofireImage (3.2.0):
-    - Alamofire (~> 4.1)
-  - Bond (6.0.4):
-    - Diff (~> 0.4)
-    - ReactiveKit (~> 3.3)
-  - Diff (0.5.0)
-  - Dip (5.0.4)
-  - ReactiveKit (3.3.1)
+  - Alamofire (4.5.1)
+  - AlamofireImage (3.3.0):
+    - Alamofire (~> 4.5)
+  - Bond (6.4.3):
+    - Differ (~> 1.0.0)
+    - ReactiveKit (~> 3.7.4)
+  - Differ (1.0.0)
+  - Dip (6.0)
+  - ReactiveKit (3.7.4)
+  - Realm (2.10.2):
+    - Realm/Headers (= 2.10.2)
+  - Realm/Headers (2.10.2)
+  - RealmSwift (2.10.2):
+    - Realm (= 2.10.2)
 
 DEPENDENCIES:
-  - Alamofire (~> 4.4)
-  - AlamofireImage (~> 3.2)
-  - Bond (~> 6.0)
-  - Dip (~> 5.0)
+  - Alamofire (~> 4.5)
+  - AlamofireImage (~> 3.3)
+  - Bond (~> 6.4)
+  - Dip (~> 6.0)
+  - RealmSwift (~> 2.10)
 
 SPEC CHECKSUMS:
-  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
-  AlamofireImage: 157ed682cc81d3b9db4fb90c1f12180ac552d93b
-  Bond: bc982d559e9c7fe30f50c29bbb5396ded9529699
-  Diff: eceb93a3adf508574ba9b8560da185ace83de055
-  Dip: 6460091adcf84ae8765f4927b85b49e6a3b67bfe
-  ReactiveKit: 27df79c2e2f0771aef1061551fcd7e82b92066e9
+  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
+  AlamofireImage: 2e784dc5d00f04903a52c1d169181469c805c3df
+  Bond: ac3e1f1a5213cddbc0a820ffc7535ac0205505e9
+  Differ: ac8137d4099659e06f3de6aa26d2c6416d986946
+  Dip: 316ad036509eaf3ef78e19699f32a9e01a5b3c3e
+  ReactiveKit: 0af7e43958a532342e0e247d2aeb318653628e68
+  Realm: 0ef72b837fb67e9f4b098bac771ddd72c7fdbb69
+  RealmSwift: 07a9ae0505091eda6b2ee7c190c3786d6e90a7b0
 
-PODFILE CHECKSUM: db2fa21a75b884c45e482f6cdd43447f882e1691
+PODFILE CHECKSUM: bba6886a0fe69014acc799bc8d1caa87a71f421a
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.3.1

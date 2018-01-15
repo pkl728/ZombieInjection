@@ -24,7 +24,7 @@ class ZombieListViewModel {
     
     func updateZombieList() {
         self.zombieService.fetchZombies()
-        if let zombies: Array<Zombie> = zombieService.getAllZombies() {
+        if let zombies = zombieService.getAllZombies() {
             tableMembers = ObservableArray<Zombie>(zombies)
             print("Items in tableMembers: \(tableMembers.count)")
         }
