@@ -13,7 +13,7 @@ class ZombieListViewModelTests: XCTestCase {
     
     private var zombieRepository: ZombieRepositoryProtocol!
     private var zombieService: ZombieServiceProtocol!
-    private var imageService: ImageDownloadService!
+    private var imageService: ImageDownloadServiceProtocol!
     private var zombieListViewModel: ZombieListViewModel!
     
     override func setUp() {

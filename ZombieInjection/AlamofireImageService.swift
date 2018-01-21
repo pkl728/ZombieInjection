@@ -10,11 +10,11 @@ import Alamofire
 import AlamofireImage
 import Foundation
 
-protocol ImageDownloadService {
+protocol ImageDownloadServiceProtocol {
     func requestImage(forItem item: ImageDownloadable)
 }
 
-struct AlamofireImageService: ImageDownloadService {
+struct AlamofireImageService: ImageDownloadServiceProtocol {
     private let imageDownloader: ImageDownloader
     
     init(imageDownloader: ImageDownloader) {
