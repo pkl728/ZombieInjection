@@ -1,5 +1,5 @@
 //
-//  RepositoryMock.swift
+//  ZombieRepositoryMock.swift
 //  ZombieInjection
 //
 //  Created by Patrick Lind on 7/27/16.
