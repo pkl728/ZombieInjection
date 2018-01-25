@@ -12,17 +12,19 @@ class ZombieDetailViewModel {
     
     var zombie: Zombie
     var zombieService: ZombieServiceProtocol
+    var zombieRepository: ZombieRepositoryProtocol
     var goBackCallBack: (() -> ())
     
-    init(zombie: Zombie, zombieService: ZombieServiceProtocol, goBackCallBack: @escaping (() -> ()))
+    init(zombie: Zombie, zombieService: ZombieServiceProtocol, zombieRepository: ZombieRepositoryProtocol, goBackCallBack: @escaping (() -> ()))
     {
         self.zombie = zombie
         self.zombieService = zombieService
+        self.zombieRepository = zombieRepository
         self.goBackCallBack = goBackCallBack
     }
     
     func save() {
-        self.zombieService.update(zombie)
+        self.zombieRepository.update(zombie)
         self.goBackCallBack()
     }
     
@@ -31,7 +33,7 @@ class ZombieDetailViewModel {
             self.goBackCallBack()
             return
         }
-        self.zombieService.update(zombieToSave)
+        self.zombieRepository.update(zombieToSave)
         self.goBackCallBack()
     }
 }
