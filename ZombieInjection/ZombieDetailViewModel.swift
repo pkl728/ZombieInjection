@@ -25,4 +25,13 @@ class ZombieDetailViewModel {
         self.zombieService.update(zombie)
         self.goBackCallBack()
     }
+    
+    func save(unmanagedZombie: Zombie?) {
+        guard let zombieToSave = unmanagedZombie else {
+            self.goBackCallBack()
+            return
+        }
+        self.zombieService.update(zombieToSave)
+        self.goBackCallBack()
+    }
 }

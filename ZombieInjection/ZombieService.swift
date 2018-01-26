@@ -14,10 +14,11 @@ protocol ZombieServiceProtocol {
     func getAllZombies() -> Array<Zombie>?
 }
 
-struct ZombieService: ZombieServiceProtocol{
-    private var zombieRepository: Repository<Zombie>
+struct ZombieService: ZombieServiceProtocol {
     
-    init(zombieRepository: Repository<Zombie>) {
+    private var zombieRepository: ZombieRepositoryProtocol
+    
+    init(zombieRepository: ZombieRepositoryProtocol) {
         self.zombieRepository = zombieRepository
     }
     
@@ -35,9 +36,11 @@ struct ZombieService: ZombieServiceProtocol{
     }
     
     private func createFakeZombies() {
+        var zombieArray: Array<Zombie> = []
         for index in 1...100 {
             let zombie = Zombie(id: index, name: "Zombie \(index)", imageUrlAddress: "http://stevensegallery.com/200/200")
-            self.zombieRepository.insert(zombie)
+            zombieArray.append(zombie)
         }
+        self.zombieRepository.insertAll(zombieArray)
     }
 }

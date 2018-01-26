@@ -10,10 +10,10 @@ import Foundation
 
 @testable import ZombieInjection
 class ZombieServiceMock: ZombieServiceProtocol {
-    private var zombieRepository: ZombieRepositoryMock
+    private var zombieRepository: ZombieRepositoryProtocol
     
-    init(zombieRepository: Repository<Zombie>) {
-        self.zombieRepository = ZombieRepositoryMock()
+    init(zombieRepository: ZombieRepositoryProtocol) {
+        self.zombieRepository = zombieRepository
     }
     
     func fetchZombies() {

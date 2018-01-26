@@ -1,5 +1,5 @@
 //
-//  RepositoryMock.swift
+//  ZombieRepositoryMock.swift
 //  ZombieInjection
 //
 //  Created by Patrick Lind on 7/27/16.
@@ -10,68 +10,68 @@ import Bond
 import Foundation
 
 @testable import ZombieInjection
-class ZombieRepositoryMock: Repository<Zombie> {
+class ZombieRepositoryMock: ZombieRepositoryProtocol {
     
-    private var dataService: DataServiceProtocol
+    private var dataService: ZombieDataServiceProtocol
     
-    override init() {
+    init() {
         // Just use the InMemoryDataService for testing purposes.
-        self.dataService = InMemoryDataService()
-        self.dataService.deleteAllZombies()
-        self.dataService.insertZombies(Array<Zombie>([ Zombie(id: 0, name: "First", imageUrlAddress: "http://test.com"),
-                                          Zombie(id: 1, name: "Second", imageUrlAddress: "http://test.com"),
-                                          Zombie(id: 2, name: "Third", imageUrlAddress: "http://test.com") ]))
+        self.dataService = InMemoryZombieDataService()
+        self.dataService.deleteAll()
+        self.dataService.insertAll(Array<Zombie>([ Zombie(id: 0, name: "First", imageUrlAddress: "http://test.com"),
+                                                Zombie(id: 1, name: "Second", imageUrlAddress: "http://test.com"),
+                                                Zombie(id: 2, name: "Third", imageUrlAddress: "http://test.com") ]))
     }
     
-    override func get(_ id: Int) -> Zombie? {
-        return self.dataService.getZombie(id)
+    func get(_ id: Int) -> Zombie? {
+        return self.dataService.get(id)
     }
     
-    override func get(_ predicate: (Zombie) throws -> Bool) -> Zombie? {
-        return self.dataService.getZombie(predicate)
+    func get(_ predicate: (Zombie) throws -> Bool) -> Zombie? {
+        return self.dataService.get(predicate)
     }
     
-    override func getAll() -> Array<Zombie>? {
-        return self.dataService.getAllZombies()
+    func getAll() -> Array<Zombie>? {
+        return self.dataService.getAll()
     }
     
-    override func getAll(_ predicate: (Zombie) throws -> Bool) -> Array<Zombie>? {
-        return self.dataService.getZombies(predicate)
+    func getAll(_ predicate: (Zombie) throws -> Bool) -> Array<Zombie>? {
+        return self.dataService.getAll(predicate)
     }
     
-    override func contains(_ predicate: (Zombie) throws -> Bool) -> Bool {
-        return self.dataService.containsZombie(predicate)
+    func contains(_ predicate: (Zombie) throws -> Bool) -> Bool {
+        return self.dataService.contains(predicate)
     }
     
-    override func insert(_ zombie: Zombie) {
-        self.dataService.insertZombie(zombie)
+    func insert(_ zombie: Zombie) {
+        self.dataService.insert(zombie)
     }
     
-    override func insertAll(_ zombies: Array<Zombie>) {
-        self.dataService.insertZombies(zombies)
+    func insertAll(_ zombies: Array<Zombie>) {
+        self.dataService.insertAll(zombies)
     }
     
-    override func delete(_ zombie: Zombie) {
-        self.dataService.deleteZombie(zombie)
+    func delete(_ zombie: Zombie) {
+        self.dataService.delete(zombie)
     }
     
-    override func deleteAll(_ predicate: (Zombie) throws -> Bool) {
-        self.dataService.deleteZombies(predicate)
+    func deleteAll(_ predicate: (Zombie) throws -> Bool) {
+        self.dataService.deleteAll(predicate)
     }
     
-    override func deleteAll() {
-        self.dataService.deleteAllZombies()
+    func deleteAll() {
+        self.dataService.deleteAll()
     }
     
-    override func update(_ zombie: Zombie) {
-        self.dataService.updateZombie(zombie)
+    func update(_ zombie: Zombie) {
+        self.dataService.update(zombie)
     }
     
-    override func count() -> Int {
-        return self.dataService.countZombies()
+    func count() -> Int {
+        return self.dataService.count()
     }
     
-    override func count(_ predicate: (Zombie) throws -> Bool) -> Int {
-        return self.dataService.countZombies(predicate)
+    func count(_ predicate: (Zombie) throws -> Bool) -> Int {
+        return self.dataService.count(predicate)
     }
 }

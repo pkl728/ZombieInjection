@@ -29,7 +29,7 @@ class AlamofireImageServiceTests: XCTestCase {
     
     func testRequestImageForImageAlreadyFilledInReturnsImmediately() {
         // Arrange
-        var zombie = Zombie(id: 0, name: "Test", imageUrlAddress: nil)
+        let zombie = Zombie(id: 0, name: "Test", imageUrlAddress: nil)
         let icon = UIImage()
         zombie.image = Observable(icon)
         

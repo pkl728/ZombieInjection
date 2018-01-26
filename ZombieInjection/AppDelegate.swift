@@ -16,12 +16,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         let zombieService = try! container.resolve() as ZombieServiceProtocol
-        let imageDownloadService = try! container.resolve() as ImageDownloadService
+        let imageDownloadService = try! container.resolve() as ImageDownloadServiceProtocol
         
         if let navViewController = self.window?.rootViewController as? UINavigationController {
             if let zombieListViewController = navViewController.topViewController as? ZombieListViewController {
-                zombieListViewController.viewModel.zombieService = zombieService
-                zombieListViewController.viewModel.imageDownloadService = imageDownloadService
+                let zombieListViewModel = ZombieListViewModel(zombieService: zombieService, imageDownloadService: imageDownloadService)
+                zombieListViewController.viewModel = zombieListViewModel
             }
         }
         return true

@@ -9,7 +9,25 @@ Bond is a Swift binding framework that takes binding concepts to a whole new lev
 
 Bond is built on top of ReactiveKit and bridges the gap between the reactive and imperative paradigms. You can use it as a standalone framework to simplify your state changes with bindings and reactive data sources, but you can also use it with ReactiveKit to complement your reactive data flows with bindings and reactive delegates and data sources.
 
-**Note: This document describes Bond v6. For changes check out the [migration section](#migration)!**
+### Note: Xcode 9 support
+
+Version 6.3 introduces Xcode 9 support. One of the required changes to support Xcode 9, i.e. Swift 3.2 or 4, was to drop `Collection` conformance from `ObservableArray`, `Observable2DArray`, `ObservableSet` and `ObservableDictionary` types. This is unfortunate, but not problematic as the types expose underlaying collection.
+
+For example, if you were doing
+
+```swift
+for element in observableArray { .. }
+```
+
+now you need to do
+
+```swift
+for element in observableArray.array { .. }
+```
+
+Respective underlaying collections for other types are `Observable2DArray.sections`, `ObservableSet.set` and `ObservableDictionary.dictionary`.
+
+Note: Since version 6.4, ReactiveKit is using Swift 4 syntax that compiles under Xcode 9. If you are still using Xcode 8, please do not update to v6.4 and stay on the latest v6.3.x version!
 
 
 ## What can it do?
@@ -61,7 +79,7 @@ Handling `touchUpInside` event is used so frequently that Bond comes with the ex
 
 ```swift
 button.reactive.tap
-  .observe {
+  .observeNext {
     print("Button tapped.")
   }  
 ```
@@ -101,7 +119,7 @@ NotificationCenter.default.reactive.notification("MyNotification")
   .observeNext { notification in
     print("Got \(notification)")
   }
-  .dispose(in: reactive.bag)
+  .dispose(in: bag)
 ```
 
 Let me give you one last example. Say you have an array of repositories you would like to display in a collection view. For each repository you have a name and its owner's profile photo. Of course, photo is not immediately available as it has to be downloaded, but once you get it, you want it to appear in collection view's cell. Additionally, when user does 'pull down to refresh' and your array gets new repositories, you want those in collection view too.
@@ -168,7 +186,7 @@ name.bind(to: nameLabel)
 
 ## Bindings
 
-Binding is a connection between a Signal/Observable that produces events and a Bond that observers events and performs certain actions (e.g. updates UI).
+Binding is a connection between a signal or observable that produces events and a bond that observers events and performs certain actions (e.g. updates UI).
 
 The producing side of bindings are signals that are defined in ReactiveKit framework on top of which Bond is built. To learn more about signals, consult [ReactiveKit documentation](https://github.com/ReactiveKit/ReactiveKit).
 
@@ -176,11 +194,11 @@ The consuming side of bindings is represented by the `Bond` type. It's a simple 
 
 ```swift
 public struct Bond<Element>: BindableProtocol {
-  public init<Target: Deallocatable>(target: Target, setter: @escaping (Target, Element) -> Void)
+  public init<Target: Deallocatable>(target: Target, context: ExecutionContext, setter: @escaping (Target, Element) -> Void)
 }
 ```
 
-The only requirement is that the target must be "deallocatable", in other words that it provides a Signal of its own deallocation.
+The only requirement is that the target must be "deallocatable", in other words that it provides a signal of its own deallocation.
 
 ```swift
 public protocol Deallocatable: class {
@@ -234,7 +252,7 @@ and we would like to present a profile screen when a user is sent on the signal.
 presentUserProfile.observeOn(.main).observeNext { [weak self] user in
   let profileViewController = ProfileViewController(user: user)
   self?.present(profileViewController, animated: true)
-}.dispose(in: reactive.bag)
+}.dispose(in: bag)
 ```
 
 But that's ugly! We have to dispatch everything to the main queue, be cautious not to create a retain cycle and ensure that the disposable we get from the observation is handled.
@@ -258,8 +276,9 @@ First make an extension on ReactiveExtensions (where `Base` is defined as your t
 
 ```swift
 extension ReactiveExtensions where Base: UITableView {
+
   public var delegate: ProtocolProxy {
-    return base.protocolProxy(for: UITableViewDelegate.self, setter: NSSelectorFromString("setDelegate:"))
+    return protocolProxy(for: UITableViewDelegate.self, keyPath: \.delegate)
   }
 }
 ```
@@ -269,12 +288,13 @@ extension ReactiveExtensions where Base: UITableView {
 You can then convert methods of that protocol into signals:
 
 ```swift
-extension UITableView {
-  var selectedRow: Signal<Int, NoError> {
-    return reactive.delegate.signal(for: #selector(UITableViewDelegate.tableView(_:didSelectRowAtIndexPath:))) { (subject: PublishSubject<Int, NoError>, _: UITableView, indexPath: NSIndexPath) in
-      subject.next(indexPath.row)
+extension ReactiveExtensions where Base: UITableView {
+
+    var selectedRow: Signal<Int, NoError> {
+        return delegate.signal(for: #selector(UITableViewDelegate.tableView(_:didSelectRowAt:))) { (subject: SafePublishSubject<Int>, _: UITableView, indexPath: IndexPath) in
+            subject.next(indexPath.row)
+        }
     }
-  }
 }
 ```
 
@@ -283,9 +303,9 @@ Method `signal(for:)` takes two parameters: a selector to convert to a signal an
 Now you can do:
 
 ```swift
-tableView.selectedRow.observeNext { row in
+tableView.reactive.selectedRow.observeNext { row in
   print("Tapped row at index \(row).")
-}.dispose(in: reactive.bag)
+}.dispose(in: bag)
 ```
 
 **Note:** Protocol proxy takes up delegate slot of the object so if you also need to implement delegate methods manually, don't set `tableView.delegate = x`, rather set `tableView.reactive.delegate.forwardTo = x`.
@@ -306,8 +326,7 @@ Method `feed` takes three parameters: a property to feed from, a selector, and a
 
 You should not set more that one feed property per selector.
 
-Note that in the mapping closures of both `signal(for:)` and `feed` methods you must be explicit about argument and return types. Also, **you must use ObjC types as this is ObjC API**. For example, use `NSString` instead of `String`.
-
+Note that in the mapping closures of both `signal(for:)` and `feed` methods you must be explicit about argument and return types.
 
 ## Reactive Data Sources
 
@@ -397,7 +416,7 @@ names[1] = "Mark"    // prints: array ["Steve", "Mark"], change: .updates([1])
 Observable array can be mapped or filtered. For example, if we map our array
 
 ```
-names.map { $0.characters.count }.observeNext { event in
+names.map { $0.characters.count }.observeNext { e in
   print("array: \(e.source), change: \(e.change)")
 }
 ```
@@ -413,7 +432,7 @@ gives us fine-grained notification of mapped array changes.
 Mapping and filtering arrays operates on an array signal. To get the result back as an observable array, just bind it to an instance of ObservableArray.
 
 ```swift
-let nameLengths = ObservableArray<Int>()
+let nameLengths = MutableObservableArray<Int>()
 names.map { $0.characters.count }.bind(to: nameLengths)
 ```
 
@@ -532,7 +551,7 @@ There are many other methods. Just look at the code reference or source.
 ## Requirements
 
 * iOS 8.0+ / macOS 10.9+ / tvOS 9.0+
-* Xcode 8
+* Xcode 9
 
 ## Communication
 
@@ -554,7 +573,7 @@ There are many other methods. Just look at the code reference or source.
 ### CocoaPods
 
 1. Add the following to your *Podfile*:
-  <br> `pod 'Bond', '~> 6.0'`
+  <br> `pod 'Bond'`
 2. Run `pod install`.
 
 ## <a name="migration"></a>Migration
@@ -581,7 +600,7 @@ What that means for you? Well, nothing has changed conceptually so your migratio
 * `ObservableArray` is reimplemented. Mapping and filtering it is not supported any more.
 * `ObservableArray` is now immutable. Use `MutableObservableArray` instead.
 * Table view and collection view binding closure now has the data source as first argument and the index path as second argument.
-* KVO can now be established using the method `dynamic(keyPath:ofType:)` on any NSObject subclass.
+* KVO can now be established using the methods `keyPath(:ofType:)` / `keyPath(:ofExpectedType:)` on any NSObject subclass.
 * `Queue` is removed. Use `DispatchQueue` instead.
 
 

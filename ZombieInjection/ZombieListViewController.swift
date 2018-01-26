@@ -13,7 +13,7 @@ import UIKit
 
 class ZombieListViewController: UIViewController, UITableViewDelegate {
     
-    let viewModel = ZombieListViewModel()
+    var viewModel: ZombieListViewModel!
     
     private var dataSource = ObservableArray<Zombie>()
     
@@ -41,7 +41,10 @@ class ZombieListViewController: UIViewController, UITableViewDelegate {
             let detailViewController = segue.destination as! ZombieDetailViewController
             detailViewController.viewModel = ZombieDetailViewModel(zombie: zombie,
                                                                    zombieService: viewModel.zombieService,
-                                                                   goBackCallBack: {var _ = detailViewController.navigationController?.popViewController(animated: true)} )
+                                                                   goBackCallBack: {
+                                                                    var _ = detailViewController.navigationController?.popViewController(animated: true)
+            }
+            )
         }
     }
     

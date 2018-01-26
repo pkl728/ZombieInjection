@@ -12,17 +12,19 @@ import Foundation
 
 class ZombieListViewModel {
     
-    var zombieService: ZombieServiceProtocol!
-    var imageDownloadService: ImageDownloadService!
+    var zombieService: ZombieServiceProtocol
+    var imageDownloadService: ImageDownloadServiceProtocol
     var tableMembers: ObservableArray<Zombie>
 
-    init() {
+    init(zombieService: ZombieServiceProtocol, imageDownloadService: ImageDownloadServiceProtocol) {
+        self.zombieService = zombieService
+        self.imageDownloadService = imageDownloadService
         self.tableMembers = ObservableArray([])
     }
     
     func updateZombieList() {
         self.zombieService.fetchZombies()
-        if let zombies: Array<Zombie> = zombieService.getAllZombies() {
+        if let zombies = zombieService.getAllZombies() {
             tableMembers = ObservableArray<Zombie>(zombies)
             print("Items in tableMembers: \(tableMembers.count)")
         }

@@ -10,11 +10,11 @@ import Alamofire
 import AlamofireImage
 import Foundation
 
-protocol ImageDownloadService {
+protocol ImageDownloadServiceProtocol {
     func requestImage(forItem item: ImageDownloadable)
 }
 
-struct AlamofireImageService: ImageDownloadService {
+struct AlamofireImageService: ImageDownloadServiceProtocol {
     private let imageDownloader: ImageDownloader
     
     init(imageDownloader: ImageDownloader) {
@@ -22,19 +22,20 @@ struct AlamofireImageService: ImageDownloadService {
     }
     
     internal func requestImage(forItem item: ImageDownloadable) {
-        if item.image.value != nil {
+        guard let imageUrlAddress = item.imageUrlAddress else {
             return
         }
         
-        if let imageUrl = item.imageUrl {
-            let urlRequest = URLRequest(url: imageUrl)
-            self.imageDownloader.download(urlRequest) { response in
-                if response.result.isFailure {
-                    print("Problem downloading")
-                }
-                if let image = response.result.value {
-                    item.image.value = image
-                }
+        guard let imageUrl = URL(string: imageUrlAddress) else {
+            return
+        }
+        let urlRequest = URLRequest(url: imageUrl)
+        self.imageDownloader.download(urlRequest) { response in
+            if response.result.isFailure {
+                print("Problem downloading")
+            }
+            if let image = response.result.value {
+                item.image.value = image
             }
         }
     }

@@ -13,13 +13,16 @@ class ZombieDetailViewControllerTests: XCTestCase {
     
     var mainViewController: ZombieListViewController!
     var detailViewController: ZombieDetailViewController!
+    var imageDownloader: ImageDownloaderMock!
     
     override func setUp() {
         super.setUp()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         self.mainViewController = storyboard.instantiateViewController(withIdentifier: "ZombieList") as! ZombieListViewController
         self.detailViewController = storyboard.instantiateViewController(withIdentifier: "ZombieDetail") as! ZombieDetailViewController
-        mainViewController.viewModel.zombieService = ZombieServiceMock(zombieRepository: ZombieRepositoryMock())
+        self.imageDownloader = ImageDownloaderMock()
+        self.imageDownloader.responseIsSuccess = true
+        mainViewController.viewModel = ZombieListViewModel(zombieService: ZombieServiceMock(zombieRepository: ZombieRepositoryMock()), imageDownloadService: AlamofireImageService(imageDownloader: self.imageDownloader))
         
         _ = mainViewController.view
     }

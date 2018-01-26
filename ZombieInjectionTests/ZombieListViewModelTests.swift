@@ -11,8 +11,9 @@ import XCTest
 @testable import ZombieInjection
 class ZombieListViewModelTests: XCTestCase {
     
-    private var zombieRepository: Repository<Zombie>!
+    private var zombieRepository: ZombieRepositoryProtocol!
     private var zombieService: ZombieServiceProtocol!
+    private var imageService: ImageDownloadServiceProtocol!
     private var zombieListViewModel: ZombieListViewModel!
     
     override func setUp() {
@@ -20,8 +21,9 @@ class ZombieListViewModelTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         self.zombieRepository = ZombieRepositoryMock()
         self.zombieService = ZombieServiceMock(zombieRepository: self.zombieRepository)
-        self.zombieListViewModel = ZombieListViewModel()
-        self.zombieListViewModel.zombieService = self.zombieService
+        let imageDownloader = ImageDownloaderMock()
+        self.imageService = AlamofireImageService(imageDownloader: imageDownloader)
+        self.zombieListViewModel = ZombieListViewModel(zombieService: self.zombieService, imageDownloadService: self.imageService)
     }
     
     override func tearDown() {

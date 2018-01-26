@@ -10,6 +10,6 @@ import Bond
 import Foundation
 
 protocol ImageDownloadable {
-    var imageUrl: URL? { get set }
+    var imageUrlAddress: String? { get set }
     var image: Observable<UIImage?> { get set }
 }
