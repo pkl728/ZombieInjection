@@ -25,7 +25,7 @@ class ZombieDetailViewModelTests: XCTestCase {
         zombieRepositoryMock.deleteAll()
         zombieRepositoryMock.insert(zombieSelected)
         zombieServiceMock = ZombieServiceMock(zombieRepository: zombieRepositoryMock)
-        zombieDetailViewModel = ZombieDetailViewModel(zombie: zombieSelected, zombieService: zombieServiceMock, zombieRepository: zombieRepositoryMock, goBackCallBack: { self.goBackCallBackCalled = true })
+        zombieDetailViewModel = ZombieDetailViewModel(zombie: zombieSelected, zombieService: zombieServiceMock, goBackCallBack: { self.goBackCallBackCalled = true })
     }
     
     override func tearDown() {

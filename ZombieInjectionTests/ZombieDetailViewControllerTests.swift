@@ -22,7 +22,7 @@ class ZombieDetailViewControllerTests: XCTestCase {
         self.detailViewController = storyboard.instantiateViewController(withIdentifier: "ZombieDetail") as! ZombieDetailViewController
         self.imageDownloader = ImageDownloaderMock()
         self.imageDownloader.responseIsSuccess = true
-        mainViewController.viewModel = ZombieListViewModel(zombieService: ZombieServiceMock(zombieRepository: ZombieRepositoryMock()), zombieRepository: ZombieRepositoryMock(), imageDownloadService: AlamofireImageService(imageDownloader: self.imageDownloader))
+        mainViewController.viewModel = ZombieListViewModel(zombieService: ZombieServiceMock(zombieRepository: ZombieRepositoryMock()), imageDownloadService: AlamofireImageService(imageDownloader: self.imageDownloader))
         
         _ = mainViewController.view
     }
@@ -46,7 +46,7 @@ class ZombieDetailViewControllerTests: XCTestCase {
     func testZombieDetailIsShown() {
         // Arrange
         let detailZombie = Zombie(id: 0, name: "Test", imageUrlAddress: nil)
-        let viewModel = ZombieDetailViewModel(zombie: detailZombie, zombieService: ZombieServiceMock(zombieRepository: ZombieRepositoryMock()), zombieRepository: ZombieRepositoryMock(), goBackCallBack: { })
+        let viewModel = ZombieDetailViewModel(zombie: detailZombie, zombieService: ZombieServiceMock(zombieRepository: ZombieRepositoryMock()), goBackCallBack: { })
         detailViewController.viewModel = viewModel
         _ = detailViewController.view
         
@@ -61,7 +61,7 @@ class ZombieDetailViewControllerTests: XCTestCase {
         // Arrange
         var goBackCalled = false
         let detailZombie = Zombie(id: 0, name: "Test", imageUrlAddress: nil)
-        let viewModel = ZombieDetailViewModel(zombie: detailZombie, zombieService: ZombieServiceMock(zombieRepository: ZombieRepositoryMock()), zombieRepository: ZombieRepositoryMock(), goBackCallBack: { goBackCalled = true })
+        let viewModel = ZombieDetailViewModel(zombie: detailZombie, zombieService: ZombieServiceMock(zombieRepository: ZombieRepositoryMock()), goBackCallBack: { goBackCalled = true })
         detailViewController.viewModel = viewModel
 
         // Act
