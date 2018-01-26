@@ -23,7 +23,7 @@ class ZombieListViewModelTests: XCTestCase {
         self.zombieService = ZombieServiceMock(zombieRepository: self.zombieRepository)
         let imageDownloader = ImageDownloaderMock()
         self.imageService = AlamofireImageService(imageDownloader: imageDownloader)
-        self.zombieListViewModel = ZombieListViewModel(zombieService: self.zombieService, imageDownloadService: self.imageService)
+        self.zombieListViewModel = ZombieListViewModel(zombieService: self.zombieService, zombieRepository: self.zombieRepository, imageDownloadService: self.imageService)
     }
     
     override func tearDown() {
