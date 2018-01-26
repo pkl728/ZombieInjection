@@ -40,7 +40,7 @@ class ZombieListViewController: UIViewController, UITableViewDelegate {
             let zombie = viewModel.tableMembers[(indexPath! as NSIndexPath).row]
             let detailViewController = segue.destination as! ZombieDetailViewController
             detailViewController.viewModel = ZombieDetailViewModel(zombie: zombie,
-                                                                   zombieService: viewModel.zombieService, zombieRepository: viewModel.zombieRepository,
+                                                                   zombieService: viewModel.zombieService,
                                                                    goBackCallBack: {
                                                                     var _ = detailViewController.navigationController?.popViewController(animated: true)
             }

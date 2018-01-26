@@ -10,6 +10,8 @@ import Foundation
 
 protocol ZombieServiceProtocol {
     func fetchZombies()
+    func update(_ zombie: Zombie)
+    func getAllZombies() -> Array<Zombie>?
 }
 
 struct ZombieService: ZombieServiceProtocol {
@@ -23,6 +25,14 @@ struct ZombieService: ZombieServiceProtocol {
     func fetchZombies() {
         self.zombieRepository.deleteAll()
         self.createFakeZombies()
+    }
+    
+    func getAllZombies() -> Array<Zombie>? {
+        return self.zombieRepository.getAll()
+    }
+    
+    func update(_ zombie: Zombie) {
+        zombieRepository.update(zombie)
     }
     
     private func createFakeZombies() {
